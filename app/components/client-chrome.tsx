@@ -26,15 +26,19 @@ export function ClientChrome({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="citatio-root">
-      <div className="citatio-app-window">
-        <CitatioFlagCanvas />
-        <main className="citatio-main">{children}</main>
-        <footer className="citatio-taskbar">
-          <span className="citatio-taskbar-credit">{t("footerCredit")}</span>
-          <div className="citatio-clock" role="status" aria-live="polite" suppressHydrationWarning>
-            {time || "—"}
+      <div className="citatio-app-bevel-outer">
+        <div className="citatio-app-bevel-mid">
+          <div className="citatio-app-window">
+            <CitatioFlagCanvas />
+            <main className="citatio-main">{children}</main>
+            <footer className="citatio-taskbar">
+              <span className="citatio-taskbar-credit">{t("footerCredit")}</span>
+              <div className="citatio-clock" role="status" aria-live="polite" suppressHydrationWarning>
+                {time || "—"}
+              </div>
+            </footer>
           </div>
-        </footer>
+        </div>
       </div>
     </div>
   );

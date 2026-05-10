@@ -19,6 +19,19 @@
   --citatio-content-width: min(1180px, 98vw);
   /* Uniform +25% scale of the app shell (aspect unchanged) */
   --ui-zoom: 1.25;
+  /* Classic Win9x 3px raised shell (outer TL light → BR dark, mid grey, inner inverted) */
+  --bevel-win-outer-tl: #ffffff;
+  --bevel-win-outer-br: #424242;
+  --bevel-win-mid: #848484;
+  --bevel-win-inner-tl: #424242;
+  --bevel-win-inner-br: #ffffff;
+  /* Inset status strip + recessed clock */
+  --shell-status-bg: #d4d0c8;
+  --bevel-inset-top: #848484;
+  --bevel-inset-bottom: #ffffff;
+  --clock-face-bg: #ffffff;
+  --clock-inset-tl: #424242;
+  --clock-inset-br: #ffffff;
 }
 
 .dark {
@@ -33,6 +46,17 @@
   --citatio-page: #2d2d2d;
   --citatio-hero-stripe-dark: #f2f2f2;
   --citatio-hero-stripe-light: #2a2a2a;
+  --bevel-win-outer-tl: #8a8a8a;
+  --bevel-win-outer-br: #1a1a1a;
+  --bevel-win-mid: #505050;
+  --bevel-win-inner-tl: #2a2a2a;
+  --bevel-win-inner-br: #6a6a6a;
+  --shell-status-bg: #323232;
+  --bevel-inset-top: #1a1a1a;
+  --bevel-inset-bottom: #505050;
+  --clock-face-bg: #1e1e1e;
+  --clock-inset-tl: #0a0a0a;
+  --clock-inset-br: #4a4a4a;
 }
 
 body {
@@ -59,18 +83,38 @@ body {
   padding: 10px;
 }
 
-/* Single raised window frame around flag + content + taskbar */
-.citatio-app-window {
+/* 3px raised bevel around flag + content + taskbar (nested 1px rings, Citatio-style) */
+.citatio-app-bevel-outer {
   flex: 1 1 auto;
-  display: flex;
-  flex-direction: column;
   min-height: calc(100vh / var(--ui-zoom) - 20px);
   width: 100%;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid;
+  border-color: var(--bevel-win-outer-tl) var(--bevel-win-outer-br) var(--bevel-win-outer-br)
+    var(--bevel-win-outer-tl);
+}
+
+.citatio-app-bevel-mid {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  border: 1px solid var(--bevel-win-mid);
+}
+
+.citatio-app-window {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  border: 1px solid;
+  border-color: var(--bevel-win-inner-tl) var(--bevel-win-inner-br) var(--bevel-win-inner-br)
+    var(--bevel-win-inner-tl);
   background: var(--w98-face);
-  border: 2px solid;
-  border-color: var(--w98-light) var(--w98-shadow) var(--w98-shadow) var(--w98-light);
-  box-shadow: 2px 2px 0 var(--w98-dark);
   overflow: hidden;
 }
 
@@ -78,7 +122,7 @@ body {
 .pl-flag-canvas-wrap {
   flex-shrink: 0;
   width: 100%;
-  border-bottom: 2px solid var(--w98-shadow);
+  border-bottom: 1px solid var(--bevel-win-mid);
   box-sizing: border-box;
   background: #1a1a1a;
 }
@@ -115,30 +159,32 @@ body {
   padding: 4px 10px;
   min-height: 30px;
   box-sizing: border-box;
-  background: var(--w98-face);
-  border-top: 2px solid;
-  border-color: var(--w98-mid) var(--w98-light) var(--w98-light) var(--w98-mid);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  background: var(--shell-status-bg);
+  border-top: 1px solid var(--bevel-inset-top);
+  border-bottom: 1px solid var(--bevel-inset-bottom);
 }
 
 .citatio-taskbar-credit {
   font-size: 11px;
-  font-weight: bold;
+  font-weight: 400;
   color: var(--w98-text);
 }
 
 .citatio-clock {
   min-width: 6.5rem;
   text-align: center;
-  padding: 3px 10px;
+  padding: 2px 8px;
   font-size: 11px;
-  font-weight: bold;
+  font-weight: 400;
   font-variant-numeric: tabular-nums;
+  color: #000000;
+  background: var(--clock-face-bg);
+  border: 1px solid;
+  border-color: var(--clock-inset-tl) var(--clock-inset-br) var(--clock-inset-br) var(--clock-inset-tl);
+}
+
+.dark .citatio-clock {
   color: var(--w98-text);
-  background: var(--w98-face);
-  border: 2px solid;
-  border-color: var(--w98-mid) var(--w98-light) var(--w98-light) var(--w98-mid);
-  box-shadow: inset 1px 1px 0 var(--w98-dark);
 }
 
 .citatio-stack {
