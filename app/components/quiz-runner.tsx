@@ -11,8 +11,7 @@ import {
   type UILang
 } from "@/lib/quiz-engine";
 import { getQuizFunFact } from "@/lib/quiz-facts";
-import type { ModeKey } from "@/lib/highscore-storage";
-import { loadStats, maybeUpdateStats } from "@/lib/highscore-storage";
+import { loadStats, maybeUpdateStats, statsKey, type ModeKey } from "@/lib/highscore-storage";
 import { loadSrs, saveSrs, srsAfterCorrect, srsAfterWrong, type SrsWeights } from "@/lib/srs-storage";
 import { useQuizPrefs } from "../context/quiz-prefs-context";
 import { useUI } from "../context/ui-context";
@@ -32,9 +31,9 @@ function applySrsUpdate(prev: SrsWeights, correct: boolean, q: QuizQuestion): Sr
 
 export function QuizRunner({ mode }: Props) {
   const { language, t } = useUI();
-  const { timerSeconds } = useQuizPrefs();
+  const { timerSeconds, difficulty } = useQuizPrefs();
   const lang = language as UILang;
-  const modeKey = mode as ModeKey;
+  const modeKey: ModeKey | null = mode === "study" ? null : statsKey(mode, difficulty);
 
   const [seed, setSeed] = useState(() => Math.floor(Math.random() * 1e9));
   const [round, setRound] = useState(0);
@@ -61,7 +60,7 @@ export function QuizRunner({ mode }: Props) {
   }, []);
 
   useEffect(() => {
-    if (mode === "study") return;
+    if (!modeKey) return;
     setBests(loadStats(modeKey));
   }, [mode, modeKey]);
 
@@ -73,12 +72,12 @@ export function QuizRunner({ mode }: Props) {
     setPhase("pick");
     setPicked(null);
     setRecordNote(null);
-  }, [lang, mode]);
+  }, [lang, mode, difficulty]);
 
   const question: QuizQuestion | null = useMemo(() => {
     if (mode === "study") return null;
-    return makeQuestion(mode, seed + round * 7919, lang, srsRef.current);
-  }, [mode, seed, round, lang, srsHydrated]);
+    return makeQuestion(mode, seed + round * 7919, lang, srsRef.current, difficulty);
+  }, [mode, seed, round, lang, srsHydrated, difficulty]);
 
   questionRef.current = question;
 
@@ -99,13 +98,14 @@ export function QuizRunner({ mode }: Props) {
         if (!q) return;
         setPicked(null);
         setPhase("revealed");
-    setSrs((prev) => {
-      const next = applySrsUpdate(prev, false, q);
-      srsRef.current = next;
-      saveSrs(next);
-      return next;
-    });
+        setSrs((prev) => {
+          const next = applySrsUpdate(prev, false, q);
+          srsRef.current = next;
+          saveSrs(next);
+          return next;
+        });
         setStreak(0);
+        if (!modeKey) return;
         const badges = maybeUpdateStats(modeKey, scoreRef.current, 0);
         setBests(loadStats(modeKey));
         setRecordNote(
@@ -142,7 +142,7 @@ export function QuizRunner({ mode }: Props) {
         : null;
 
   function onPick(i: number) {
-    if (phase !== "pick" || !question) return;
+    if (phase !== "pick" || !question || !modeKey) return;
     setPicked(i);
     setPhase("revealed");
     const correct = i === correctIndex;

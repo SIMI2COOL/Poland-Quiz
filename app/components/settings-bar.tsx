@@ -2,15 +2,29 @@
 
 import { useTheme } from "next-themes";
 import { FlagGB, FlagPL } from "./flag-icons";
+import type { Difficulty } from "@/lib/cities";
 import { useQuizPrefs, type TimerOption } from "../context/quiz-prefs-context";
 import { useUI } from "../context/ui-context";
 
 const TIMER_OPTIONS: TimerOption[] = [0, 15, 30, 45];
+const DIFFICULTY_OPTIONS: Difficulty[] = ["easy", "medium", "hard"];
+
+const DIFFICULTY_LABEL_KEY = {
+  easy: "difficultyEasy",
+  medium: "difficultyMedium",
+  hard: "difficultyHard"
+} as const;
+
+const DIFFICULTY_HINT_KEY = {
+  easy: "difficultyHintEasy",
+  medium: "difficultyHintMedium",
+  hard: "difficultyHintHard"
+} as const;
 
 export function SettingsBar() {
   const { setTheme } = useTheme();
   const { language, setLanguage, t } = useUI();
-  const { timerSeconds, setTimerSeconds } = useQuizPrefs();
+  const { timerSeconds, setTimerSeconds, difficulty, setDifficulty } = useQuizPrefs();
 
   return (
     <nav className="retro-menubar citatio-settings" aria-label={t("settingsAria")}>
@@ -35,6 +49,21 @@ export function SettingsBar() {
               >
                 <FlagPL className="lang-flag-svg" /> PL
               </button>
+        </div>
+        <span className="retro-menubar-divider" aria-hidden="true" />
+        <span className="retro-menubar-label">{t("difficultyLabel")}</span>
+        <div className="retro-pill-group">
+          {DIFFICULTY_OPTIONS.map((d) => (
+            <button
+              key={d}
+              type="button"
+              className={`retro-chip ${difficulty === d ? "retro-chip--on" : ""}`}
+              onClick={() => setDifficulty(d)}
+              title={t(DIFFICULTY_HINT_KEY[d])}
+            >
+              {t(DIFFICULTY_LABEL_KEY[d])}
+            </button>
+          ))}
         </div>
         <span className="retro-menubar-divider" aria-hidden="true" />
         <span className="retro-menubar-label">{t("timerLabel")}</span>

@@ -62,7 +62,14 @@ const dictionary = {
     bestScoreLabel: "Best score",
     bestStreakLabel: "Best streak",
     newBestScore: "New best score for this mode!",
-    newBestStreak: "New best streak for this mode!"
+    newBestStreak: "New best streak for this mode!",
+    difficultyLabel: "Level",
+    difficultyEasy: "Easy",
+    difficultyMedium: "Medium",
+    difficultyHard: "Hard",
+    difficultyHintEasy: "Smaller city set — learn the core map first (like the first rows of the periodic table).",
+    difficultyHintMedium: "Adds more county towns and regional centres.",
+    difficultyHintHard: "Full city deck — maximum geography drill."
   },
   pl: {
     appTitle: "Quiz o Polsce",
@@ -115,7 +122,14 @@ const dictionary = {
     bestScoreLabel: "Rekord punktów",
     bestStreakLabel: "Rekord serii",
     newBestScore: "Nowy rekord punktów w tym trybie!",
-    newBestStreak: "Nowy rekord serii w tym trybie!"
+    newBestStreak: "Nowy rekord serii w tym trybie!",
+    difficultyLabel: "Poziom",
+    difficultyEasy: "Łatwy",
+    difficultyMedium: "Średni",
+    difficultyHard: "Trudny",
+    difficultyHintEasy: "Mniejszy zestaw miast — najpierw rdzeń mapy (jak pierwsze rzędy układu okresowego).",
+    difficultyHintMedium: "Dodaje powiatowe miasta i większe ośrodki regionalne.",
+    difficultyHintHard: "Pełna talia miast — maksymalny trening geografii."
   }
 };
 

@@ -2,15 +2,17 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { CITIES } from "@/lib/cities";
+import { citiesForDifficulty, type CityEntry } from "@/lib/cities";
 import { getStudyVoivFact } from "@/lib/quiz-facts";
 import { VOIVODESHIPS, voivById } from "@/lib/voivodeships";
 import { voivLabel, type UILang } from "@/lib/quiz-engine";
+import { useQuizPrefs } from "../context/quiz-prefs-context";
 import { useUI } from "../context/ui-context";
 import { PolandMap } from "./poland-map";
 
 export function StudyExplorer() {
   const { language, t } = useUI();
+  const { difficulty } = useQuizPrefs();
   const lang = language as UILang;
   const [selectedId, setSelectedId] = useState("14");
 
@@ -20,8 +22,11 @@ export function StudyExplorer() {
   );
 
   const citiesInVoiv = useMemo(
-    () => CITIES.filter((c) => c.voivId === selectedId).sort((a, b) => citySort(a, b, lang)),
-    [selectedId, lang]
+    () =>
+      citiesForDifficulty(difficulty)
+        .filter((c) => c.voivId === selectedId)
+        .sort((a, b) => citySort(a, b, lang)),
+    [selectedId, lang, difficulty]
   );
 
   const v = voivById.get(selectedId);
@@ -78,7 +83,7 @@ export function StudyExplorer() {
   );
 }
 
-function citySort(a: (typeof CITIES)[number], b: (typeof CITIES)[number], lang: UILang) {
+function citySort(a: CityEntry, b: CityEntry, lang: UILang) {
   const an = lang === "pl" ? a.namePl : a.nameEn;
   const bn = lang === "pl" ? b.namePl : b.nameEn;
   return an.localeCompare(bn, lang === "pl" ? "pl" : "en");

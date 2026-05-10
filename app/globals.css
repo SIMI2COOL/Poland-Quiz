@@ -80,57 +80,91 @@ body {
   );
 }
 
-.pl-flag-shimmer {
+/* Diagonal micro-square shimmer (rainbow-strip style) over the flag */
+.pl-flag-shimmer-stack {
   position: absolute;
   inset: 0;
   pointer-events: none;
   overflow: hidden;
 }
 
-.pl-flag-shimmer-cell {
+.pl-flag-mesh {
   position: absolute;
-  left: -24px;
-  width: 13px;
-  height: 13px;
-  margin-top: -6px;
-  transform: rotate(45deg);
-  background: rgba(255, 255, 255, 0.42);
-  border: 1px solid rgba(0, 0, 0, 0.12);
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.35);
-  animation-name: pl-square-drift, pl-square-fade;
-  animation-timing-function: linear, ease-in-out;
-  animation-iteration-count: infinite, infinite;
+  left: -35%;
+  top: -40%;
+  width: 170%;
+  height: 180%;
+  opacity: 0.5;
+  mix-blend-mode: soft-light;
+  transform: skewX(-14deg);
+  background-image: repeating-linear-gradient(
+      118deg,
+      rgba(255, 255, 255, 0) 0,
+      rgba(255, 255, 255, 0) 4px,
+      rgba(255, 255, 255, 0.26) 4px,
+      rgba(255, 255, 255, 0.26) 5px,
+      rgba(255, 255, 255, 0) 5px,
+      rgba(255, 255, 255, 0) 10px
+    ),
+    repeating-linear-gradient(
+      118deg,
+      rgba(0, 0, 0, 0) 0,
+      rgba(0, 0, 0, 0) 9px,
+      rgba(0, 0, 0, 0.09) 9px,
+      rgba(0, 0, 0, 0.09) 10px,
+      rgba(0, 0, 0, 0) 10px,
+      rgba(0, 0, 0, 0) 19px
+    );
+  background-size: 11px 11px, 11px 11px;
+  animation: pl-mesh-slide 5.5s linear infinite, pl-mesh-pulse 2.6s ease-in-out infinite;
 }
 
-.dark .pl-flag-shimmer-cell {
-  background: rgba(255, 255, 255, 0.28);
-  box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+.pl-flag-mesh--b {
+  left: -40%;
+  opacity: 0.38;
+  transform: skewX(-14deg) scaleX(-1);
+  animation-duration: 7.2s, 3.1s;
+  animation-direction: reverse, alternate;
+  mix-blend-mode: overlay;
 }
 
-@keyframes pl-square-drift {
-  from {
-    transform: translate3d(0, 0, 0) rotate(45deg);
-  }
-  to {
-    transform: translate3d(calc(100vw + 48px), 0, 0) rotate(45deg);
-  }
+.dark .pl-flag-mesh {
+  background-image: repeating-linear-gradient(
+      118deg,
+      rgba(255, 255, 255, 0) 0,
+      rgba(255, 255, 255, 0) 4px,
+      rgba(255, 255, 255, 0.16) 4px,
+      rgba(255, 255, 255, 0.16) 5px,
+      rgba(255, 255, 255, 0) 5px,
+      rgba(255, 255, 255, 0) 10px
+    ),
+    repeating-linear-gradient(
+      118deg,
+      rgba(0, 0, 0, 0) 0,
+      rgba(0, 0, 0, 0) 9px,
+      rgba(0, 0, 0, 0.14) 9px,
+      rgba(0, 0, 0, 0.14) 10px,
+      rgba(0, 0, 0, 0) 10px,
+      rgba(0, 0, 0, 0) 19px
+    );
 }
 
-@keyframes pl-square-fade {
+@keyframes pl-mesh-slide {
   0% {
-    opacity: 0;
-  }
-  18% {
-    opacity: 0.92;
-  }
-  45% {
-    opacity: 0.2;
-  }
-  72% {
-    opacity: 0.75;
+    background-position: 0 0, 6px 0;
   }
   100% {
-    opacity: 0;
+    background-position: 220px 0, -180px 0;
+  }
+}
+
+@keyframes pl-mesh-pulse {
+  0%,
+  100% {
+    opacity: 0.22;
+  }
+  50% {
+    opacity: 0.62;
   }
 }
 

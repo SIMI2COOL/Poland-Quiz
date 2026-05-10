@@ -1,10 +1,12 @@
-import { CITIES, type CityEntry } from "./cities";
+import { citiesForDifficulty, type CityEntry, type Difficulty } from "./cities";
 import type { SrsWeights } from "./srs-storage";
 import { cityPickWeight, voivPickWeight } from "./srs-storage";
 import { VOIVODESHIPS, type Voivodeship, voivById } from "./voivodeships";
 
 export type QuizMode = "woj" | "gminy" | "mixed" | "study";
 export type UILang = "en" | "pl";
+
+export type { Difficulty } from "./cities";
 
 export type CapitalQuestion = {
   kind: "capital";
@@ -76,10 +78,15 @@ export function makeCapitalQuestion(seed: number, lang: UILang, srs?: SrsWeights
   };
 }
 
-export function makeRegionQuestion(seed: number, srs?: SrsWeights | null): RegionQuestion {
+export function makeRegionQuestion(
+  seed: number,
+  srs: SrsWeights | null | undefined,
+  difficulty: Difficulty
+): RegionQuestion {
   const rand = mulberry32(seed);
-  const weights = CITIES.map((c) => cityPickWeight(c.voivId, c.namePl, srs ?? { voiv: {}, city: {} }));
-  const city = pickWeighted(CITIES, weights, rand);
+  const pool = citiesForDifficulty(difficulty);
+  const weights = pool.map((c) => cityPickWeight(c.voivId, c.namePl, srs ?? { voiv: {}, city: {} }));
+  const city = pickWeighted(pool, weights, rand);
   const correct = voivById.get(city.voivId)!;
   const wrong = shuffle(
     VOIVODESHIPS.filter((v) => v.id !== correct.id),
@@ -98,12 +105,15 @@ export function makeQuestion(
   mode: Exclude<QuizMode, "study">,
   seed: number,
   lang: UILang,
-  srs?: SrsWeights | null
+  srs: SrsWeights | null | undefined,
+  difficulty: Difficulty
 ): QuizQuestion {
   if (mode === "woj") return makeCapitalQuestion(seed, lang, srs);
-  if (mode === "gminy") return makeRegionQuestion(seed, srs);
+  if (mode === "gminy") return makeRegionQuestion(seed, srs, difficulty);
   const branch = mulberry32(seed)() < 0.5;
-  return branch ? makeCapitalQuestion(seed + 1, lang, srs) : makeRegionQuestion(seed + 9999, srs);
+  return branch
+    ? makeCapitalQuestion(seed + 1, lang, srs)
+    : makeRegionQuestion(seed + 9999, srs, difficulty);
 }
 
 export function studyDeckOrder(seed: number): Voivodeship[] {
