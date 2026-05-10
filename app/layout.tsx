@@ -5,12 +5,26 @@ import { ThemeProvider } from "./components/theme-provider";
 import { QuizPrefsProvider } from "./context/quiz-prefs-context";
 import { UIProvider } from "./context/ui-context";
 
-/** Base URL for Open Graph / Twitter cards (WhatsApp, etc.). Set in production, e.g. `https://your-domain.com` */
+/**
+ * Base URL for Open Graph / Twitter (WhatsApp, iMessage, etc.).
+ * Prefer stable production host: `VERCEL_URL` is deployment-specific and can be
+ * SSO-protected (401) for bots — `VERCEL_PROJECT_PRODUCTION_URL` is the project’s production domain.
+ */
 function getMetadataBase(): URL {
-  const raw = process.env.NEXT_PUBLIC_SITE_URL?.trim();
-  if (raw) {
-    const normalized = raw.replace(/\/$/, "");
-    return new URL(normalized);
+  const custom = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+  if (custom) {
+    return new URL(custom.replace(/\/$/, ""));
+  }
+  const prodHost = process.env.VERCEL_PROJECT_PRODUCTION_URL?.trim();
+  if (prodHost) {
+    if (prodHost.startsWith("http://") || prodHost.startsWith("https://")) {
+      return new URL(prodHost.replace(/\/$/, ""));
+    }
+    return new URL(`https://${prodHost.replace(/\/$/, "")}`);
+  }
+  /* Production deploys: never use VERCEL_URL for OG — it’s a per-deploy host that can 401 for crawlers */
+  if (process.env.VERCEL === "1" && process.env.VERCEL_ENV === "production") {
+    return new URL("https://poland-quiz.vercel.app");
   }
   if (process.env.VERCEL_URL) {
     return new URL(`https://${process.env.VERCEL_URL}`);
@@ -34,6 +48,7 @@ export const metadata: Metadata = {
     siteName: "Quiz o Polsce",
     title: "Quiz o Polsce",
     description: OG_DESCRIPTION,
+    url: "/",
     images: [
       {
         url: "/og-image.png",
