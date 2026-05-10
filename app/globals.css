@@ -55,139 +55,21 @@ body {
   transform-origin: top left;
 }
 
-/* Full-width Polish flag: white / red stripes + rainbow-style vertical bars (diagonal via stagger) */
-.pl-flag-bar {
-  position: relative;
+/* Citatio-style flag strip: canvas (see citatio-flag-canvas.tsx — mirrors Citatio RainbowHeader) */
+.pl-flag-canvas-wrap {
   flex-shrink: 0;
   width: 100%;
-  height: 52px;
-  overflow: hidden;
   border-bottom: 2px solid var(--w98-shadow);
   box-sizing: border-box;
+  background: #1a1a1a;
 }
 
-.pl-flag-stripes {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to bottom,
-    #f4f4f4 0%,
-    #f4f4f4 50%,
-    #c91634 50%,
-    #c91634 100%
-  );
-}
-
-.dark .pl-flag-stripes {
-  background: linear-gradient(
-    to bottom,
-    #e2e2e2 0%,
-    #e2e2e2 50%,
-    #a8122a 50%,
-    #a8122a 100%
-  );
-}
-
-/* Vertical translucent bars per stripe; red row offset → diagonal columns; drift + fade */
-.pl-flag-float {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  display: flex;
-  flex-direction: column;
-}
-
-.pl-flag-float-row {
-  flex: 1;
-  position: relative;
-  overflow: hidden;
-}
-
-.pl-flag-float-track {
-  position: absolute;
-  inset: 0;
+.pl-flag-canvas {
+  display: block;
   width: 100%;
-  height: 100%;
-  background-repeat: repeat-x;
-  background-size: 46px 100%;
-  will-change: background-position, opacity;
-  animation-timing-function: linear, ease-in-out;
-  animation-iteration-count: infinite, infinite;
-  animation-duration: 2.2s, 1.65s;
-}
-
-.pl-flag-float-row--white .pl-flag-float-track {
-  background-image: repeating-linear-gradient(
-    90deg,
-    transparent 0,
-    transparent 22px,
-    rgba(0, 0, 0, 0.07) 22px,
-    rgba(0, 0, 0, 0.07) 26px
-  );
-  animation-name: pl-flag-bars-drift-white, pl-flag-bars-fade;
-}
-
-.pl-flag-float-row--red .pl-flag-float-track {
-  background-image: repeating-linear-gradient(
-    90deg,
-    transparent 0,
-    transparent 22px,
-    rgba(0, 0, 0, 0.26) 22px,
-    rgba(0, 0, 0, 0.26) 26px
-  );
-  animation-name: pl-flag-bars-drift-red, pl-flag-bars-fade;
-  animation-delay: 0s, 0.4s;
-}
-
-.dark .pl-flag-float-row--white .pl-flag-float-track {
-  background-image: repeating-linear-gradient(
-    90deg,
-    transparent 0,
-    transparent 22px,
-    rgba(0, 0, 0, 0.12) 22px,
-    rgba(0, 0, 0, 0.12) 26px
-  );
-}
-
-.dark .pl-flag-float-row--red .pl-flag-float-track {
-  background-image: repeating-linear-gradient(
-    90deg,
-    transparent 0,
-    transparent 22px,
-    rgba(0, 0, 0, 0.38) 22px,
-    rgba(0, 0, 0, 0.38) 26px
-  );
-}
-
-@keyframes pl-flag-bars-drift-white {
-  from {
-    background-position: 0 0;
-  }
-  to {
-    background-position: 46px 0;
-  }
-}
-
-@keyframes pl-flag-bars-drift-red {
-  from {
-    background-position: 12px 0;
-  }
-  to {
-    background-position: 58px 0;
-  }
-}
-
-@keyframes pl-flag-bars-fade {
-  0%,
-  100% {
-    opacity: 0.18;
-  }
-  45% {
-    opacity: 0.72;
-  }
-  70% {
-    opacity: 0.32;
-  }
+  height: 56px;
+  image-rendering: pixelated;
+  vertical-align: top;
 }
 
 .citatio-main {
@@ -402,10 +284,13 @@ body {
   box-shadow: 1px 1px 0 var(--w98-dark);
 }
 
-/* Settings bar: single horizontal row (scroll on very narrow viewports) */
+/* Settings bar: one row, full labels, larger hit targets (scroll only if viewport is very narrow) */
 .citatio-settings.retro-menubar {
   flex-wrap: nowrap;
-  gap: 6px;
+  align-items: center;
+  gap: 10px 14px;
+  min-height: 52px;
+  padding: 10px 14px;
   overflow-x: auto;
   overflow-y: hidden;
   scrollbar-width: thin;
@@ -413,30 +298,44 @@ body {
 
 .citatio-settings .retro-menubar-app {
   flex-shrink: 0;
+  font-size: 15px;
+  gap: 8px;
 }
 
 .citatio-settings .retro-menubar-cluster {
   flex-wrap: nowrap;
   flex: 1 1 auto;
   min-width: 0;
-  gap: 4px 6px;
+  gap: 10px 14px;
+  font-size: 14px;
+}
+
+.citatio-settings .retro-menubar-label {
+  font-size: 14px;
+  white-space: nowrap;
 }
 
 .citatio-settings .retro-menubar-divider {
   flex-shrink: 0;
-  height: 16px;
-  margin: 0 1px;
+  height: 28px;
+  margin: 0 2px;
 }
 
 .citatio-settings .retro-pill-group {
   flex-shrink: 0;
-  padding: 1px;
-  gap: 1px;
+  padding: 3px;
+  gap: 3px;
 }
 
 .citatio-settings .retro-chip {
-  padding: 2px 6px;
+  padding: 7px 14px;
+  font-size: 14px;
   white-space: nowrap;
+}
+
+.citatio-settings .retro-menubar-flag {
+  width: 20px;
+  height: 14px;
 }
 
 .retro-menubar-app {
