@@ -5,24 +5,26 @@ import { useEffect, useMemo, useState } from "react";
 import {
   cityLabel,
   makeQuestion,
-  studyDeckOrder,
   voivLabel,
   type QuizMode,
-  type QuizQuestion
+  type QuizQuestion,
+  type UILang
 } from "@/lib/quiz-engine";
+import { getVoivFact } from "@/lib/voiv-facts";
 import { useUI } from "../context/ui-context";
+import { PolandMap } from "./poland-map";
+import { StudyExplorer } from "./study-explorer";
 
 type Props = { mode: QuizMode };
 
 export function QuizRunner({ mode }: Props) {
   const { language, t } = useUI();
-  const lang = language;
+  const lang = language as UILang;
   const [seed, setSeed] = useState(() => Math.floor(Math.random() * 1e9));
   const [round, setRound] = useState(0);
   const [score, setScore] = useState(0);
   const [phase, setPhase] = useState<"pick" | "revealed">("pick");
   const [picked, setPicked] = useState<number | null>(null);
-  const [studyIndex, setStudyIndex] = useState(0);
 
   useEffect(() => {
     setSeed(Math.floor(Math.random() * 1e9));
@@ -30,10 +32,7 @@ export function QuizRunner({ mode }: Props) {
     setScore(0);
     setPhase("pick");
     setPicked(null);
-    setStudyIndex(0);
   }, [lang, mode]);
-
-  const deck = useMemo(() => studyDeckOrder(seed + 42), [seed, mode]);
 
   const question: QuizQuestion | null = useMemo(() => {
     if (mode === "study") return null;
@@ -41,44 +40,19 @@ export function QuizRunner({ mode }: Props) {
   }, [mode, seed, round, lang]);
 
   if (mode === "study") {
-    const v = deck[studyIndex % deck.length]!;
-    return (
-      <div className="citatio-quiz">
-        <p className="citatio-study-lead m-0 text-center">{t("studyLead")}</p>
-        <div className="citatio-study-card">
-          <div className="citatio-study-row">
-            <span className="citatio-study-k">{t("studyVoivLabel")}</span>
-            <span className="citatio-study-v">{voivLabel(v, lang)}</span>
-          </div>
-          <div className="citatio-study-row">
-            <span className="citatio-study-k">{t("studyCapitalLabel")}</span>
-            <span className="citatio-study-v">{lang === "pl" ? v.capitalPl : v.capitalEn}</span>
-          </div>
-        </div>
-        <p className="citatio-study-count m-0 text-center">
-          {t("studyCounter")
-            .replace("{n}", String(studyIndex + 1))
-            .replace("{total}", String(deck.length))}
-        </p>
-        <div className="citatio-quiz-actions">
-          <button
-            type="button"
-            className="retro-btn citatio-option"
-            onClick={() => setStudyIndex((i) => (i + 1) % deck.length)}
-          >
-            {t("studyNext")}
-          </button>
-          <Link href="/" className="retro-btn citatio-option no-underline text-center">
-            {t("backHome")}
-          </Link>
-        </div>
-      </div>
-    );
+    return <StudyExplorer />;
   }
 
   if (!question) return null;
 
   const correctIndex = question.answerIndex;
+
+  const mapHighlight: string | null =
+    question.kind === "capital"
+      ? question.voiv.id
+      : phase === "revealed"
+        ? question.options[correctIndex]!.id
+        : null;
 
   function onPick(i: number) {
     if (phase !== "pick") return;
@@ -114,71 +88,102 @@ export function QuizRunner({ mode }: Props) {
       ? question.options[correctIndex]!
       : voivLabel(question.options[correctIndex]!, lang);
 
+  const factVoivId =
+    question.kind === "capital" ? question.voiv.id : question.options[correctIndex]!.id;
+  const funFact = phase === "revealed" ? getVoivFact(factVoivId, lang) : "";
+
   return (
-    <div className="citatio-quiz">
-      {prompt}
-      <div className="citatio-options" role="group" aria-label={t("choicesAria")}>
-        {question.kind === "capital"
-          ? question.options.map((label, i) => {
-              let extra = "";
-              if (phase === "revealed") {
-                if (i === correctIndex) extra = " citatio-option--correct";
-                else if (i === picked) extra = " citatio-option--wrong";
-              }
-              return (
-                <button
-                  key={i}
-                  type="button"
-                  className={`retro-btn citatio-option${extra}`}
-                  onClick={() => onPick(i)}
-                  disabled={phase === "revealed"}
-                >
-                  {label}
-                </button>
-              );
-            })
-          : question.options.map((vo, i) => {
-              let extra = "";
-              if (phase === "revealed") {
-                if (i === correctIndex) extra = " citatio-option--correct";
-                else if (i === picked) extra = " citatio-option--wrong";
-              }
-              return (
-                <button
-                  key={vo.id}
-                  type="button"
-                  className={`retro-btn citatio-option${extra}`}
-                  onClick={() => onPick(i)}
-                  disabled={phase === "revealed"}
-                >
-                  {voivLabel(vo, lang)}
-                </button>
-              );
-            })}
+    <div className="citatio-quiz-shell">
+      <div className="citatio-quiz-toprow">
+        <span className="citatio-quiz-spacer" />
+        <div className="citatio-score-gadget retro-panel-sunken">
+          <span className="citatio-score-gadget-label">{t("scoreLabel")}</span>
+          <span className="citatio-score-gadget-val">
+            <strong>{score}</strong>
+            <span className="citatio-score-slash">/</span>
+            <strong>{answeredCount}</strong>
+          </span>
+        </div>
       </div>
-      {phase === "revealed" && (
-        <p className={`citatio-feedback m-0 ${isCorrect ? "citatio-feedback--ok" : "citatio-feedback--bad"}`}>
-          {isCorrect ? t("feedbackCorrect") : t("feedbackWrong")}
-          {!isCorrect && (
+
+      <div className="citatio-quiz-body">
+        <div className="citatio-quiz-map">
+          <PolandMap highlightTerytId={mapHighlight} pulse />
+        </div>
+        <div className="citatio-quiz-panel">
+          {prompt}
+          <div className="citatio-options-grid" role="group" aria-label={t("choicesAria")}>
+            {question.kind === "capital"
+              ? question.options.map((label, i) => {
+                  const letter = String.fromCharCode(65 + i);
+                  let extra = "";
+                  if (phase === "revealed") {
+                    if (i === correctIndex) extra = " citatio-option--correct";
+                    else if (i === picked) extra = " citatio-option--wrong";
+                  }
+                  return (
+                    <button
+                      key={i}
+                      type="button"
+                      className={`retro-btn citatio-option citatio-option-abcd${extra}`}
+                      onClick={() => onPick(i)}
+                      disabled={phase === "revealed"}
+                    >
+                      <span className="citatio-abcd">{letter}</span> {label}
+                    </button>
+                  );
+                })
+              : question.options.map((vo, i) => {
+                  const letter = String.fromCharCode(65 + i);
+                  let extra = "";
+                  if (phase === "revealed") {
+                    if (i === correctIndex) extra = " citatio-option--correct";
+                    else if (i === picked) extra = " citatio-option--wrong";
+                  }
+                  return (
+                    <button
+                      key={vo.id}
+                      type="button"
+                      className={`retro-btn citatio-option citatio-option-abcd${extra}`}
+                      onClick={() => onPick(i)}
+                      disabled={phase === "revealed"}
+                    >
+                      <span className="citatio-abcd">{letter}</span> {voivLabel(vo, lang)}
+                    </button>
+                  );
+                })}
+          </div>
+          {phase === "revealed" && (
             <>
-              {" "}
-              {t("feedbackReveal")} <strong>{correctAnswerText}</strong>.
+              <p
+                className={`citatio-feedback m-0 ${isCorrect ? "citatio-feedback--ok" : "citatio-feedback--bad"}`}
+              >
+                {isCorrect ? t("feedbackCorrect") : t("feedbackWrong")}
+                {!isCorrect && (
+                  <>
+                    {" "}
+                    {t("feedbackReveal")} <strong>{correctAnswerText}</strong>.
+                  </>
+                )}
+              </p>
+              {funFact && (
+                <div className="citatio-funfact retro-panel-sunken">
+                  <span className="citatio-funfact-label">{t("funFactLabel")}</span> {funFact}
+                </div>
+              )}
             </>
           )}
-        </p>
-      )}
-      <p className="citatio-score m-0">
-        {t("scoreLabel")}: <strong>{score}</strong> {t("scoreOf")} <strong>{answeredCount}</strong>
-      </p>
-      <div className="citatio-quiz-actions">
-        {phase === "revealed" && (
-          <button type="button" className="retro-btn citatio-option" onClick={onNext}>
-            {t("nextQuestion")}
-          </button>
-        )}
-        <Link href="/" className="retro-btn citatio-option no-underline text-center">
-          {t("backHome")}
-        </Link>
+          <div className="citatio-quiz-actions">
+            {phase === "revealed" && (
+              <button type="button" className="retro-btn citatio-option" onClick={onNext}>
+                {t("nextQuestion")}
+              </button>
+            )}
+            <Link href="/" className="retro-btn citatio-option no-underline text-center">
+              {t("backHome")}
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );

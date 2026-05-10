@@ -16,20 +16,26 @@ export function SettingsBar() {
       <div className="retro-menubar-cluster">
         <span className="retro-menubar-label">{t("lang")}</span>
         <div className="retro-pill-group">
-          <button
-            type="button"
-            className={`retro-chip ${language === "en" ? "retro-chip--on" : ""}`}
-            onClick={() => setLanguage("en")}
-          >
-            EN
-          </button>
-          <button
-            type="button"
-            className={`retro-chip ${language === "pl" ? "retro-chip--on" : ""}`}
-            onClick={() => setLanguage("pl")}
-          >
-            PL
-          </button>
+              <button
+                type="button"
+                className={`retro-chip ${language === "en" ? "retro-chip--on" : ""}`}
+                onClick={() => setLanguage("en")}
+              >
+                <span className="lang-flag" aria-hidden>
+                  🇬🇧
+                </span>{" "}
+                EN
+              </button>
+              <button
+                type="button"
+                className={`retro-chip ${language === "pl" ? "retro-chip--on" : ""}`}
+                onClick={() => setLanguage("pl")}
+              >
+                <span className="lang-flag" aria-hidden>
+                  🇵🇱
+                </span>{" "}
+                PL
+              </button>
         </div>
         <span className="retro-menubar-divider" aria-hidden="true" />
         <span className="retro-menubar-label">{t("theme")}</span>

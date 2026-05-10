@@ -22,7 +22,7 @@ const dictionary = {
     theme: "Theme",
     light: "Light",
     dark: "Dark",
-    footerCredit: "Poland Quiz — for learning",
+    footerCredit: "Made by Teo Simon Untroib",
     settingsAria: "Language and appearance",
     windowHome: "Poland Quiz — Home",
     windowWoj: "Poland Quiz — Voivodeships",
@@ -49,7 +49,10 @@ const dictionary = {
     backHome: "Back to main menu",
     unknownMode: "Unknown quiz mode.",
     homeLink: "Home",
-    notFoundBody: "This address is not part of Poland Quiz."
+    notFoundBody: "This address is not part of Poland Quiz.",
+    funFactLabel: "Did you know?",
+    studyTreeTitle: "Voivodeships",
+    studyCitiesHeading: "Cities in this set"
   },
   pl: {
     appTitle: "Quiz o Polsce",
@@ -62,7 +65,7 @@ const dictionary = {
     theme: "Motyw",
     light: "Jasny",
     dark: "Ciemny",
-    footerCredit: "Quiz o Polsce — do nauki",
+    footerCredit: "Made by Teo Simon Untroib",
     settingsAria: "Język i wygląd",
     windowHome: "Quiz o Polsce — Start",
     windowWoj: "Quiz o Polsce — Województwa",
@@ -89,7 +92,10 @@ const dictionary = {
     backHome: "Powrót do menu",
     unknownMode: "Nieznany tryb quizu.",
     homeLink: "Start",
-    notFoundBody: "Ten adres nie należy do Quizu o Polsce."
+    notFoundBody: "Ten adres nie należy do Quizu o Polsce.",
+    funFactLabel: "Czy wiesz, że…",
+    studyTreeTitle: "Województwa",
+    studyCitiesHeading: "Miasta w tym zestawie"
   }
 };
 

@@ -29,7 +29,7 @@ export default function QuizModePage() {
 
   if (!isMode(slug)) {
     return (
-      <div className="citatio-stack citatio-stack--center">
+      <div className="citatio-stack citatio-stack--quiz citatio-stack--center">
         <SettingsBar />
         <RetroWindow title="?" className="w-full">
           <p className="m-0 text-center font-bold">{t("unknownMode")}</p>
@@ -42,7 +42,7 @@ export default function QuizModePage() {
   }
 
   return (
-    <div className="citatio-stack">
+    <div className="citatio-stack citatio-stack--quiz">
       <SettingsBar />
       <RetroWindow title={t(TITLE_KEY[slug])} className="w-full">
         <QuizRunner mode={slug} />
