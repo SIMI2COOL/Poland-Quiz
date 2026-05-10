@@ -106,7 +106,7 @@ body {
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  border: var(--shell-raised-ring) solid var(--bevel-win-mid);
+  border: calc(var(--shell-raised-ring) * 6) solid var(--bevel-win-mid);
 }
 
 .citatio-app-window {
@@ -221,7 +221,9 @@ body {
   font-size: clamp(2rem, 9vw, 3rem);
   font-weight: 900;
   letter-spacing: -0.03em;
-  line-height: 1;
+  /* Room for descenders (Q, g, y) — line-height 1 + background-clip:text often crops */
+  line-height: 1.18;
+  padding: 0.04em 0 0.14em;
   background: repeating-linear-gradient(
     to bottom,
     var(--citatio-hero-stripe-dark) 0 5px,
