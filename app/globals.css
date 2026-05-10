@@ -15,6 +15,8 @@
   --citatio-page: #dcdcdc;
   --citatio-hero-stripe-dark: #121212;
   --citatio-hero-stripe-light: #e8e8e8;
+  /* ~120% browser zoom for the whole shell (see .citatio-root) */
+  --ui-zoom: 1.2;
 }
 
 .dark {
@@ -38,16 +40,22 @@ body {
   margin: 0;
   min-height: 100vh;
   background: var(--citatio-page);
+  overflow-x: hidden;
 }
 
 /* —— Citatio-style shell —— */
 .citatio-root {
-  min-height: 100vh;
+  min-height: calc(100vh / var(--ui-zoom));
+  width: calc(100vw / var(--ui-zoom));
+  max-width: calc(100vw / var(--ui-zoom));
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  transform: scale(var(--ui-zoom));
+  transform-origin: top left;
 }
 
-/* Full-width Polish flag: white / red stripes + drifting diagonal squares */
+/* Full-width Polish flag: white / red stripes + rainbow-style vertical bars (diagonal via stagger) */
 .pl-flag-bar {
   position: relative;
   flex-shrink: 0;
@@ -80,91 +88,105 @@ body {
   );
 }
 
-/* Diagonal micro-square shimmer (rainbow-strip style) over the flag */
-.pl-flag-shimmer-stack {
+/* Vertical translucent bars per stripe; red row offset → diagonal columns; drift + fade */
+.pl-flag-float {
   position: absolute;
   inset: 0;
   pointer-events: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.pl-flag-float-row {
+  flex: 1;
+  position: relative;
   overflow: hidden;
 }
 
-.pl-flag-mesh {
+.pl-flag-float-track {
   position: absolute;
-  left: -35%;
-  top: -40%;
-  width: 170%;
-  height: 180%;
-  opacity: 0.5;
-  mix-blend-mode: soft-light;
-  transform: skewX(-14deg);
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background-repeat: repeat-x;
+  background-size: 46px 100%;
+  will-change: background-position, opacity;
+  animation-timing-function: linear, ease-in-out;
+  animation-iteration-count: infinite, infinite;
+  animation-duration: 2.2s, 1.65s;
+}
+
+.pl-flag-float-row--white .pl-flag-float-track {
   background-image: repeating-linear-gradient(
-      118deg,
-      rgba(255, 255, 255, 0) 0,
-      rgba(255, 255, 255, 0) 4px,
-      rgba(255, 255, 255, 0.26) 4px,
-      rgba(255, 255, 255, 0.26) 5px,
-      rgba(255, 255, 255, 0) 5px,
-      rgba(255, 255, 255, 0) 10px
-    ),
-    repeating-linear-gradient(
-      118deg,
-      rgba(0, 0, 0, 0) 0,
-      rgba(0, 0, 0, 0) 9px,
-      rgba(0, 0, 0, 0.09) 9px,
-      rgba(0, 0, 0, 0.09) 10px,
-      rgba(0, 0, 0, 0) 10px,
-      rgba(0, 0, 0, 0) 19px
-    );
-  background-size: 11px 11px, 11px 11px;
-  animation: pl-mesh-slide 5.5s linear infinite, pl-mesh-pulse 2.6s ease-in-out infinite;
+    90deg,
+    transparent 0,
+    transparent 22px,
+    rgba(0, 0, 0, 0.07) 22px,
+    rgba(0, 0, 0, 0.07) 26px
+  );
+  animation-name: pl-flag-bars-drift-white, pl-flag-bars-fade;
 }
 
-.pl-flag-mesh--b {
-  left: -40%;
-  opacity: 0.38;
-  transform: skewX(-14deg) scaleX(-1);
-  animation-duration: 7.2s, 3.1s;
-  animation-direction: reverse, alternate;
-  mix-blend-mode: overlay;
-}
-
-.dark .pl-flag-mesh {
+.pl-flag-float-row--red .pl-flag-float-track {
   background-image: repeating-linear-gradient(
-      118deg,
-      rgba(255, 255, 255, 0) 0,
-      rgba(255, 255, 255, 0) 4px,
-      rgba(255, 255, 255, 0.16) 4px,
-      rgba(255, 255, 255, 0.16) 5px,
-      rgba(255, 255, 255, 0) 5px,
-      rgba(255, 255, 255, 0) 10px
-    ),
-    repeating-linear-gradient(
-      118deg,
-      rgba(0, 0, 0, 0) 0,
-      rgba(0, 0, 0, 0) 9px,
-      rgba(0, 0, 0, 0.14) 9px,
-      rgba(0, 0, 0, 0.14) 10px,
-      rgba(0, 0, 0, 0) 10px,
-      rgba(0, 0, 0, 0) 19px
-    );
+    90deg,
+    transparent 0,
+    transparent 22px,
+    rgba(0, 0, 0, 0.26) 22px,
+    rgba(0, 0, 0, 0.26) 26px
+  );
+  animation-name: pl-flag-bars-drift-red, pl-flag-bars-fade;
+  animation-delay: 0s, 0.4s;
 }
 
-@keyframes pl-mesh-slide {
-  0% {
-    background-position: 0 0, 6px 0;
+.dark .pl-flag-float-row--white .pl-flag-float-track {
+  background-image: repeating-linear-gradient(
+    90deg,
+    transparent 0,
+    transparent 22px,
+    rgba(0, 0, 0, 0.12) 22px,
+    rgba(0, 0, 0, 0.12) 26px
+  );
+}
+
+.dark .pl-flag-float-row--red .pl-flag-float-track {
+  background-image: repeating-linear-gradient(
+    90deg,
+    transparent 0,
+    transparent 22px,
+    rgba(0, 0, 0, 0.38) 22px,
+    rgba(0, 0, 0, 0.38) 26px
+  );
+}
+
+@keyframes pl-flag-bars-drift-white {
+  from {
+    background-position: 0 0;
   }
-  100% {
-    background-position: 220px 0, -180px 0;
+  to {
+    background-position: 46px 0;
   }
 }
 
-@keyframes pl-mesh-pulse {
+@keyframes pl-flag-bars-drift-red {
+  from {
+    background-position: 12px 0;
+  }
+  to {
+    background-position: 58px 0;
+  }
+}
+
+@keyframes pl-flag-bars-fade {
   0%,
   100% {
-    opacity: 0.22;
+    opacity: 0.18;
   }
-  50% {
-    opacity: 0.62;
+  45% {
+    opacity: 0.72;
+  }
+  70% {
+    opacity: 0.32;
   }
 }
 
@@ -378,6 +400,43 @@ body {
   border: 2px solid;
   border-color: var(--w98-light) var(--w98-shadow) var(--w98-shadow) var(--w98-light);
   box-shadow: 1px 1px 0 var(--w98-dark);
+}
+
+/* Settings bar: single horizontal row (scroll on very narrow viewports) */
+.citatio-settings.retro-menubar {
+  flex-wrap: nowrap;
+  gap: 6px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+}
+
+.citatio-settings .retro-menubar-app {
+  flex-shrink: 0;
+}
+
+.citatio-settings .retro-menubar-cluster {
+  flex-wrap: nowrap;
+  flex: 1 1 auto;
+  min-width: 0;
+  gap: 4px 6px;
+}
+
+.citatio-settings .retro-menubar-divider {
+  flex-shrink: 0;
+  height: 16px;
+  margin: 0 1px;
+}
+
+.citatio-settings .retro-pill-group {
+  flex-shrink: 0;
+  padding: 1px;
+  gap: 1px;
+}
+
+.citatio-settings .retro-chip {
+  padding: 2px 6px;
+  white-space: nowrap;
 }
 
 .retro-menubar-app {

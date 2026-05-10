@@ -33,7 +33,7 @@ export function SettingsBar() {
         <span>{t("appTitle")}</span>
       </div>
       <div className="retro-menubar-cluster">
-        <span className="retro-menubar-label">{t("lang")}</span>
+        <span className="retro-menubar-label">{t("menubarLang")}</span>
         <div className="retro-pill-group">
               <button
                 type="button"
@@ -51,7 +51,7 @@ export function SettingsBar() {
               </button>
         </div>
         <span className="retro-menubar-divider" aria-hidden="true" />
-        <span className="retro-menubar-label">{t("difficultyLabel")}</span>
+        <span className="retro-menubar-label">{t("menubarLevel")}</span>
         <div className="retro-pill-group">
           {DIFFICULTY_OPTIONS.map((d) => (
             <button
@@ -66,7 +66,7 @@ export function SettingsBar() {
           ))}
         </div>
         <span className="retro-menubar-divider" aria-hidden="true" />
-        <span className="retro-menubar-label">{t("timerLabel")}</span>
+        <span className="retro-menubar-label">{t("menubarTimer")}</span>
         <div className="retro-pill-group">
           {TIMER_OPTIONS.map((sec) => (
             <button
@@ -80,7 +80,7 @@ export function SettingsBar() {
           ))}
         </div>
         <span className="retro-menubar-divider" aria-hidden="true" />
-        <span className="retro-menubar-label">{t("theme")}</span>
+        <span className="retro-menubar-label">{t("menubarTheme")}</span>
         <div className="retro-pill-group">
           <button type="button" className="retro-chip" onClick={() => setTheme("light")}>
             ☀ {t("light")}

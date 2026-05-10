@@ -19,6 +19,10 @@ const dictionary = {
     mixed: "Mixed (random)",
     study: "Study cards",
     lang: "Language",
+    menubarLang: "Lang.",
+    menubarLevel: "Lvl.",
+    menubarTimer: "Time",
+    menubarTheme: "Theme",
     theme: "Theme",
     light: "Light",
     dark: "Dark",
@@ -67,9 +71,9 @@ const dictionary = {
     difficultyEasy: "Easy",
     difficultyMedium: "Medium",
     difficultyHard: "Hard",
-    difficultyHintEasy: "Smaller city set — learn the core map first (like the first rows of the periodic table).",
-    difficultyHintMedium: "Adds more county towns and regional centres.",
-    difficultyHintHard: "Full city deck — maximum geography drill."
+    difficultyHintEasy: "Up to 1–3 cities per voivodeship (seats first) — learn the core map.",
+    difficultyHintMedium: "5–6 cities per voivodeship — regional drill before the full deck.",
+    difficultyHintHard: "Every city in the deck — maximum geography drill."
   },
   pl: {
     appTitle: "Quiz o Polsce",
@@ -79,6 +83,10 @@ const dictionary = {
     mixed: "Mieszany (losowo)",
     study: "Fiszki",
     lang: "Język",
+    menubarLang: "Jęz.",
+    menubarLevel: "Poz.",
+    menubarTimer: "Czas",
+    menubarTheme: "Mot.",
     theme: "Motyw",
     light: "Jasny",
     dark: "Ciemny",
@@ -127,9 +135,9 @@ const dictionary = {
     difficultyEasy: "Łatwy",
     difficultyMedium: "Średni",
     difficultyHard: "Trudny",
-    difficultyHintEasy: "Mniejszy zestaw miast — najpierw rdzeń mapy (jak pierwsze rzędy układu okresowego).",
-    difficultyHintMedium: "Dodaje powiatowe miasta i większe ośrodki regionalne.",
-    difficultyHintHard: "Pełna talia miast — maksymalny trening geografii."
+    difficultyHintEasy: "Do 1–3 miast na województwo (najpierw stolice) — rdzeń mapy.",
+    difficultyHintMedium: "5–6 miast na województwo — trening przed pełną talią.",
+    difficultyHintHard: "Wszystkie miasta z talii — maksymalny trening geografii."
   }
 };
 

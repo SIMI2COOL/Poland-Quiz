@@ -1,4 +1,4 @@
-import { voivById } from "./voivodeships";
+import { voivById, VOIVODESHIPS } from "./voivodeships";
 
 /** Cities / towns for “which voivodeship?” — expanded learning set (major towns & seats). */
 export type CityEntry = {
@@ -7,9 +7,19 @@ export type CityEntry = {
   voivId: string;
 };
 
-/** Quiz difficulty: larger tiers include more cities (periodic-table style progression). */
-export type CityLearningTier = 1 | 2 | 3;
+/** Quiz difficulty: per-voivodeship city caps (easy 1–3, medium 5–6, hard = full list). */
 export type Difficulty = "easy" | "medium" | "hard";
+
+/** 1, 2, or 3 cities per woj in easy mode (stable per TERYT id). */
+function easyCityCap(voivId: string): number {
+  return 1 + (Number(voivId) % 3);
+}
+
+/** 5 or 6 cities per woj in medium mode (TERYT ids are all even, so use list index). */
+function mediumCityCap(voivId: string): number {
+  const idx = VOIVODESHIPS.findIndex((v) => v.id === voivId);
+  return 5 + ((idx >= 0 ? idx : 0) % 2);
+}
 
 export const CITIES: CityEntry[] = [
   // dolnośląskie 02
@@ -288,46 +298,22 @@ export const CITIES: CityEntry[] = [
   { namePl: "Gryfice", nameEn: "Gryfice", voivId: "32" }
 ];
 
-/** Voivodeship seats + statutory second seats (easy pool). */
-function isTier1Seat(c: CityEntry): boolean {
-  const v = voivById.get(c.voivId);
-  if (!v) return false;
-  if (c.namePl === v.capitalPl) return true;
-  if (c.voivId === "04" && c.namePl === "Toruń") return true;
-  if (c.voivId === "08" && c.namePl === "Gorzów Wielkopolski") return true;
-  return false;
-}
-
-function buildCityTiers(): Map<CityEntry, CityLearningTier> {
+/** Cities asked in “which voivodeship?” — list order is seat-heavy per woj; we slice by cap. */
+export function citiesForDifficulty(d: Difficulty): CityEntry[] {
   const byVoiv = new Map<string, CityEntry[]>();
   for (const c of CITIES) {
     const list = byVoiv.get(c.voivId) ?? [];
     list.push(c);
     byVoiv.set(c.voivId, list);
   }
-  const out = new Map<CityEntry, CityLearningTier>();
-  for (const list of byVoiv.values()) {
-    const nonSeat = list.filter((c) => !isTier1Seat(c));
-    const cut = Math.max(3, Math.ceil(nonSeat.length * 0.58));
-    for (const c of list) {
-      if (isTier1Seat(c)) out.set(c, 1);
-      else {
-        const idx = nonSeat.indexOf(c);
-        out.set(c, idx >= 0 && idx < cut ? 2 : 3);
-      }
+  const out: CityEntry[] = [];
+  for (const [voivId, list] of byVoiv) {
+    if (d === "hard") {
+      out.push(...list);
+      continue;
     }
+    const cap = d === "easy" ? easyCityCap(voivId) : mediumCityCap(voivId);
+    out.push(...list.slice(0, Math.min(cap, list.length)));
   }
   return out;
-}
-
-const CITY_TIERS: Map<CityEntry, CityLearningTier> = buildCityTiers();
-
-export function learningTier(c: CityEntry): CityLearningTier {
-  return CITY_TIERS.get(c) ?? 3;
-}
-
-/** Cities asked in “which voivodeship?” at a given difficulty. */
-export function citiesForDifficulty(d: Difficulty): CityEntry[] {
-  const max = d === "easy" ? 1 : d === "medium" ? 2 : 3;
-  return CITIES.filter((c) => learningTier(c) <= max);
 }

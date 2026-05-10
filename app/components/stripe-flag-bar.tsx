@@ -1,16 +1,20 @@
 "use client";
 
 /**
- * Full-width Polish flag: white / red stripes + two skewed “mesh” layers of tiny diagonal
- * square shimmer (Citatio rainbow strip style: lines of squares, drift + fade).
+ * Polish flag stripes + rainbow-style overlay: vertical translucent bars per stripe,
+ * bottom stripe offset so columns read diagonally; bars drift horizontally and fade.
  */
 export function StripeFlagBar() {
   return (
     <div className="pl-flag-bar" aria-hidden>
       <div className="pl-flag-stripes" />
-      <div className="pl-flag-shimmer-stack">
-        <div className="pl-flag-mesh pl-flag-mesh--a" />
-        <div className="pl-flag-mesh pl-flag-mesh--b" />
+      <div className="pl-flag-float">
+        <div className="pl-flag-float-row pl-flag-float-row--white">
+          <div className="pl-flag-float-track" />
+        </div>
+        <div className="pl-flag-float-row pl-flag-float-row--red">
+          <div className="pl-flag-float-track" />
+        </div>
       </div>
     </div>
   );
