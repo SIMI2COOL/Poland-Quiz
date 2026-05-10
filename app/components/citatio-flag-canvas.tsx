@@ -4,16 +4,26 @@ import { useTheme } from "next-themes";
 import { useCallback, useEffect, useRef } from "react";
 
 /**
- * Six seamless bands: 3 white, 3 red.
- * Sparse transparent grey squares (no gradients); opacity fades in/out; +0.1px offset per column.
+ * Pixel-for-pixel same algorithm as Citatio `website/index.html` drawRainbow /
+ * RainbowHeader (QTimer 120 ms, block=4, drift, %7 grid, accent rgba 60/255).
+ * Only `COLORS` is swapped for a Polish white / red six-stripe band.
  */
-const TICK_MS = 100;
-const BLOCK = 14;
-const GRID_MOD = 15;
+const RAINBOW_INTERVAL_MS = 120;
+const BLOCK = 4;
 const HEADER_H = 52;
+const ACCENT_ALPHA = 60 / 255;
 
-const STRIPES_LIGHT = ["#f4f4f4", "#f4f4f4", "#f4f4f4", "#c91634", "#c91634", "#c91634"] as const;
-const STRIPES_DARK = ["#e6e6e6", "#e6e6e6", "#e6e6e6", "#a8122a", "#a8122a", "#a8122a"] as const;
+/** Six bands: light greys → reds (Citatio uses 6 rainbow hues). */
+const COLORS_LIGHT = ["#ffffff", "#f5f5f5", "#ebebeb", "#e2233a", "#c91634", "#a8142c"] as const;
+const COLORS_DARK = ["#ececec", "#e4e4e4", "#dcdcdc", "#c01830", "#a8122a", "#901024"] as const;
+
+function hexToRgb(hex: string) {
+  return {
+    r: parseInt(hex.slice(1, 3), 16),
+    g: parseInt(hex.slice(3, 5), 16),
+    b: parseInt(hex.slice(5, 7), 16)
+  };
+}
 
 export function CitatioFlagCanvas() {
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -46,31 +56,34 @@ export function CitatioFlagCanvas() {
 
     const w = Math.max(1, Math.floor(wrap.getBoundingClientRect().width));
     const h = HEADER_H;
-    const dark = resolvedTheme === "dark";
-    const stripeColors = dark ? STRIPES_DARK : STRIPES_LIGHT;
-    const n = stripeColors.length;
+    const COLORS = resolvedTheme === "dark" ? COLORS_DARK : COLORS_LIGHT;
+    const n = COLORS.length;
 
     tickRef.current = (tickRef.current + 1) % 10000;
     const tick = tickRef.current;
+
+    const stripeH = Math.max(1, Math.floor(h / n));
     const drift = (tick * 2) % (BLOCK * n);
+    let y = 0;
 
     for (let i = 0; i < n; i++) {
-      const y0 = Math.floor((h * i) / n);
-      const y1 = Math.floor((h * (i + 1)) / n);
-      const stripeH = Math.max(1, y1 - y0);
+      ctx.fillStyle = COLORS[i]!;
+      ctx.fillRect(0, y, w, stripeH);
 
-      ctx.fillStyle = stripeColors[i]!;
-      ctx.fillRect(0, y0, w, stripeH);
+      const accentHex = COLORS[(i + ((tick / 2) | 0)) % n]!;
+      const { r, g, b } = hexToRgb(accentHex);
+      ctx.fillStyle = `rgba(${r},${g},${b},${ACCENT_ALPHA})`;
 
       for (let x = -drift; x < w + BLOCK; x += BLOCK) {
-        const col = Math.floor((x + drift) / BLOCK);
-        if ((col + i * 2 + ((tick / 2) | 0)) % GRID_MOD === 0) {
-          const gx = x + col * 0.1;
-          const alpha = 0.04 + 0.14 * (0.5 + 0.5 * Math.sin(tick * 0.22 + col * 0.09));
-          ctx.fillStyle = `rgba(96, 96, 96, ${alpha})`;
-          ctx.fillRect(gx, y0, BLOCK, stripeH);
+        if ((((x / BLOCK) | 0) + i + ((tick / 2) | 0)) % 7 === 0) {
+          ctx.fillRect(x, y, BLOCK, stripeH);
         }
       }
+      y += stripeH;
+    }
+    if (y < h) {
+      ctx.fillStyle = COLORS[n - 1]!;
+      ctx.fillRect(0, y, w, h - y);
     }
   }, [resolvedTheme]);
 
@@ -89,7 +102,7 @@ export function CitatioFlagCanvas() {
     ro.observe(wrap);
     const id = window.setInterval(() => {
       draw();
-    }, TICK_MS);
+    }, RAINBOW_INTERVAL_MS);
     return () => {
       ro.disconnect();
       window.clearInterval(id);
