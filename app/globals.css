@@ -1,0 +1,64 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --xp-bg: #3a6ea5;
+  --xp-surface: #d4e3f7;
+  --xp-border-light: #ffffff;
+  --xp-border-dark: #4e6d8f;
+  --xp-title-start: #0a246a;
+  --xp-title-end: #a6c9f0;
+  --xp-text: #001b44;
+  --xp-button: #dbe9fb;
+  --xp-button-shadow: #7f9db9;
+}
+
+.dark {
+  --xp-bg: #1f2a3a;
+  --xp-surface: #2f3d52;
+  --xp-border-light: #7f8aa0;
+  --xp-border-dark: #0c1220;
+  --xp-title-start: #132c59;
+  --xp-title-end: #526e9f;
+  --xp-text: #d9e8ff;
+  --xp-button: #415271;
+  --xp-button-shadow: #101828;
+}
+
+body {
+  font-family: Tahoma, "MS Sans Serif", "Segoe UI", sans-serif;
+  color: var(--xp-text);
+  background: radial-gradient(circle at 20% 10%, #7cb5ff33, transparent 50%), var(--xp-bg);
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image: url('/textures/bliss-grain.svg');
+  opacity: 0.08;
+}
+
+.xp-window {
+  background: var(--xp-surface);
+  border: 2px solid var(--xp-border-dark);
+  box-shadow: inset 1px 1px 0 var(--xp-border-light), 4px 4px 0 rgba(0,0,0,0.3);
+}
+
+.xp-titlebar {
+  background: linear-gradient(90deg, var(--xp-title-start), var(--xp-title-end));
+  color: white;
+}
+
+.xp-btn {
+  background: var(--xp-button);
+  border: 2px solid var(--xp-button-shadow);
+  box-shadow: inset 1px 1px 0 #fff, inset -1px -1px 0 #6f8cb0;
+}
+
+.xp-btn:active {
+  box-shadow: inset -1px -1px 0 #fff, inset 1px 1px 0 #6f8cb0;
+  transform: translateY(1px);
+}
