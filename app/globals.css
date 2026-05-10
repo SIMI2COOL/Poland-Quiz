@@ -3,33 +3,82 @@
 @tailwind utilities;
 
 :root {
-  --xp-bg: #3a6ea5;
-  --xp-surface: #d4e3f7;
-  --xp-border-light: #ffffff;
-  --xp-border-dark: #4e6d8f;
-  --xp-title-start: #0a246a;
-  --xp-title-end: #a6c9f0;
-  --xp-text: #001b44;
-  --xp-button: #dbe9fb;
-  --xp-button-shadow: #7f9db9;
+  /* Vista glass + Mac platinum (light) */
+  --retro-desktop-1: #5a93d4;
+  --retro-desktop-2: #7ec49a;
+  --retro-desktop-3: #c9b56a;
+  --retro-desktop-4: #4a7ab8;
+  --retro-surface-top: #f2f2ee;
+  --retro-surface-bottom: #d8d8d4;
+  --retro-text: #1a1a1a;
+  --retro-text-muted: #3d3d3d;
+  --retro-border-out: #8a8a8a;
+  --retro-border-in: #ffffff;
+  --retro-title-glow: rgba(255, 255, 255, 0.35);
+  --retro-title-stripe: rgba(0, 0, 0, 0.06);
+  --retro-menubar-bg: linear-gradient(180deg, #f6f6f3 0%, #dcdcd4 100%);
+  --retro-menubar-border: #2d2d2d;
+  --retro-btn-top: #feffff;
+  --retro-btn-mid: #e8edf4;
+  --retro-btn-bottom: #c8d2e2;
+  --retro-btn-border: #4a6789;
+  --retro-btn-shadow: rgba(0, 0, 0, 0.18);
+  --retro-window-outer: rgba(0, 0, 0, 0.45);
+  --retro-noise-opacity: 0.07;
 }
 
 .dark {
-  --xp-bg: #1f2a3a;
-  --xp-surface: #2f3d52;
-  --xp-border-light: #7f8aa0;
-  --xp-border-dark: #0c1220;
-  --xp-title-start: #132c59;
-  --xp-title-end: #526e9f;
-  --xp-text: #d9e8ff;
-  --xp-button: #415271;
-  --xp-button-shadow: #101828;
+  --retro-desktop-1: #1e2f45;
+  --retro-desktop-2: #243a32;
+  --retro-desktop-3: #3a3520;
+  --retro-desktop-4: #152436;
+  --retro-surface-top: #3a3a38;
+  --retro-surface-bottom: #2a2a28;
+  --retro-text: #f4f4f0;
+  --retro-text-muted: #c8c8c0;
+  --retro-border-out: #0a0a0a;
+  --retro-border-in: #5a5a58;
+  --retro-title-glow: rgba(255, 255, 255, 0.12);
+  --retro-title-stripe: rgba(255, 255, 255, 0.05);
+  --retro-menubar-bg: linear-gradient(180deg, #4a4a46 0%, #2f2f2c 100%);
+  --retro-menubar-border: #0c0c0c;
+  --retro-btn-top: #5c6474;
+  --retro-btn-mid: #454d5c;
+  --retro-btn-bottom: #323946;
+  --retro-btn-border: #1a2230;
+  --retro-btn-shadow: rgba(0, 0, 0, 0.5);
+  --retro-window-outer: rgba(0, 0, 0, 0.65);
+  --retro-noise-opacity: 0.12;
 }
 
 body {
-  font-family: Tahoma, "MS Sans Serif", "Segoe UI", sans-serif;
-  color: var(--xp-text);
-  background: radial-gradient(circle at 20% 10%, #7cb5ff33, transparent 50%), var(--xp-bg);
+  font-family: "Segoe UI", Geneva, "Lucida Grande", Charcoal, Tahoma, sans-serif;
+  color: var(--retro-text);
+  min-height: 100vh;
+  letter-spacing: 0.01em;
+  background-color: var(--retro-desktop-4);
+  background-image:
+    radial-gradient(ellipse 130% 90% at 12% 18%, var(--retro-title-glow), transparent 52%),
+    radial-gradient(ellipse 100% 80% at 88% 8%, rgba(126, 214, 255, 0.28), transparent 50%),
+    linear-gradient(
+      168deg,
+      var(--retro-desktop-1) 0%,
+      var(--retro-desktop-2) 38%,
+      var(--retro-desktop-3) 72%,
+      var(--retro-desktop-4) 100%
+    );
+}
+
+.dark body {
+  background-image:
+    radial-gradient(ellipse 120% 85% at 15% 20%, rgba(255, 255, 255, 0.06), transparent 55%),
+    linear-gradient(
+      168deg,
+      var(--retro-desktop-1) 0%,
+      var(--retro-desktop-2) 40%,
+      var(--retro-desktop-3) 75%,
+      var(--retro-desktop-4) 100%
+    );
 }
 
 body::before {
@@ -37,28 +86,235 @@ body::before {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  background-image: url('/textures/bliss-grain.svg');
-  opacity: 0.08;
+  background-image: url("/textures/bliss-grain.svg");
+  opacity: var(--retro-noise-opacity);
+  mix-blend-mode: overlay;
 }
 
-.xp-window {
-  background: var(--xp-surface);
-  border: 2px solid var(--xp-border-dark);
-  box-shadow: inset 1px 1px 0 var(--xp-border-light), 4px 4px 0 rgba(0,0,0,0.3);
+/* —— Menu bar (Mac OS 9–style strip) —— */
+.retro-menubar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1rem;
+  padding: 0.35rem 0.75rem;
+  background: var(--retro-menubar-bg);
+  border: 1px solid var(--retro-menubar-border);
+  border-radius: 4px;
+  box-shadow:
+    inset 0 1px 0 var(--retro-border-in),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.12),
+    0 2px 6px var(--retro-window-outer);
 }
 
-.xp-titlebar {
-  background: linear-gradient(90deg, var(--xp-title-start), var(--xp-title-end));
-  color: white;
+.retro-menubar-app {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--retro-text);
+  text-shadow: 0 1px 0 var(--retro-border-in);
 }
 
-.xp-btn {
-  background: var(--xp-button);
-  border: 2px solid var(--xp-button-shadow);
-  box-shadow: inset 1px 1px 0 #fff, inset -1px -1px 0 #6f8cb0;
+.retro-menubar-cluster {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.65rem;
+  font-size: 0.75rem;
 }
 
-.xp-btn:active {
-  box-shadow: inset -1px -1px 0 #fff, inset 1px 1px 0 #6f8cb0;
+@media (min-width: 640px) {
+  .retro-menubar-cluster {
+    font-size: 0.8125rem;
+  }
+}
+
+.retro-menubar-label {
+  font-weight: 700;
+  color: var(--retro-text-muted);
+}
+
+/* —— Window shell (Vista rounding + Mac inset panel) —— */
+.retro-window {
+  overflow: hidden;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.35);
+  box-shadow:
+    0 1px 0 var(--retro-border-in),
+    0 12px 28px var(--retro-window-outer),
+    0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+.dark .retro-window {
+  border-color: rgba(0, 0, 0, 0.65);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.08),
+    0 14px 32px var(--retro-window-outer),
+    0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.retro-titlebar {
+  position: relative;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.35);
+  background-image:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 1px,
+      var(--retro-title-stripe) 1px,
+      var(--retro-title-stripe) 2px
+    ),
+    linear-gradient(180deg, #7eb9ea 0%, #4a8fd4 22%, #2f6fb8 52%, #1a4d87 100%);
+  box-shadow: inset 0 1px 0 var(--retro-title-glow);
+}
+
+.dark .retro-titlebar {
+  background-image:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 1px,
+      var(--retro-title-stripe) 1px,
+      var(--retro-title-stripe) 2px
+    ),
+    linear-gradient(180deg, #4a6a8f 0%, #355a82 35%, #243d5c 100%);
+  border-bottom-color: rgba(0, 0, 0, 0.5);
+}
+
+.retro-title-text {
+  color: #fff;
+}
+
+/* Mac OS 9–style close box */
+.retro-mac9-close {
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+  border: 1px solid #1a1a1a;
+  border-radius: 1px;
+  background: linear-gradient(145deg, #f8f8f8 0%, #b8b8b8 55%, #909090 100%);
+  box-shadow:
+    inset 1px 1px 0 rgba(255, 255, 255, 0.85),
+    inset -1px -1px 0 rgba(0, 0, 0, 0.25);
+}
+
+.dark .retro-mac9-close {
+  background: linear-gradient(145deg, #6a6a6a 0%, #404040 100%);
+  border-color: #000;
+}
+
+/* Vista-style window controls (decorative) */
+.retro-vista-controls {
+  min-width: 3.25rem;
+  justify-content: flex-end;
+}
+
+.retro-vista-cap {
+  display: block;
+  width: 1.35rem;
+  height: 1.1rem;
+  border-radius: 3px 3px 0 0;
+  border: 1px solid rgba(0, 0, 0, 0.35);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0.08) 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.retro-vista-min {
+  background: linear-gradient(180deg, #8fc4f0 0%, #3a78b0 100%);
+}
+
+.retro-vista-max {
+  background: linear-gradient(180deg, #8fc4f0 0%, #3a78b0 100%);
+}
+
+.retro-vista-x {
+  background: linear-gradient(180deg, #e8a598 0%, #b84a3a 100%);
+}
+
+.dark .retro-vista-cap {
+  border-color: rgba(0, 0, 0, 0.55);
+}
+
+/* Content well */
+.retro-window-content {
+  padding: 1rem 1.1rem;
+  background: linear-gradient(180deg, var(--retro-surface-top) 0%, var(--retro-surface-bottom) 100%);
+  border-top: 1px solid var(--retro-border-in);
+}
+
+@media (min-width: 640px) {
+  .retro-window-content {
+    padding: 1.35rem 1.5rem;
+  }
+}
+
+/* Buttons: Vista glow + Mac bevel */
+.retro-btn {
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+  color: var(--retro-text);
+  border-radius: 5px;
+  border: 1px solid var(--retro-btn-border);
+  background: linear-gradient(180deg, var(--retro-btn-top) 0%, var(--retro-btn-mid) 45%, var(--retro-btn-bottom) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.75),
+    0 1px 2px var(--retro-btn-shadow);
+  transition:
+    border-color 0.12s ease,
+    box-shadow 0.12s ease,
+    transform 0.08s ease;
+}
+
+.retro-btn:hover {
+  border-color: #f4b942;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    0 0 0 1px rgba(244, 185, 66, 0.35),
+    0 2px 8px rgba(244, 185, 66, 0.25);
+}
+
+.retro-btn:active {
+  box-shadow:
+    inset 0 2px 4px rgba(0, 0, 0, 0.15),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.35);
   transform: translateY(1px);
+}
+
+.dark .retro-btn:hover {
+  border-color: #e8c866;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 0 0 1px rgba(232, 200, 102, 0.35),
+    0 2px 10px rgba(0, 0, 0, 0.45);
+}
+
+.retro-launch-grid {
+  display: grid;
+  gap: 0.65rem;
+}
+
+@media (min-width: 768px) {
+  .retro-launch-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.85rem;
+  }
+}
+
+.retro-launch-tile {
+  text-align: left;
+  padding: 1.1rem 1.15rem;
+  font-size: 1rem;
+}
+
+@media (min-width: 640px) {
+  .retro-launch-tile {
+    padding: 1.35rem 1.25rem;
+    font-size: 1.05rem;
+  }
 }
