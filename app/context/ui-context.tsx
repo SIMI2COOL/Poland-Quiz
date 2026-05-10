@@ -13,7 +13,7 @@ type UIContextType = {
 const dictionary = {
   en: {
     appTitle: "Poland Quiz",
-    subtitle: "Poland Quiz.exe",
+    subtitle: "Choose a quiz mode",
     woj: "Województwa Only",
     gminy: "Gminy Only",
     mixed: "Mixed (Randomized)",
@@ -21,11 +21,16 @@ const dictionary = {
     lang: "Language",
     theme: "Theme",
     light: "Light",
-    dark: "Dark"
+    dark: "Dark",
+    quizStub:
+      "This screen confirms the quiz mode opened correctly. Map and question rounds can plug in here later — for now, every menu button on the home page should bring you to its own room like this one.",
+    quizHintMap: "Home has four tiles — each one links to a different practice mode.",
+    quizHintBack: "Use the button below whenever you want to return to the main menu.",
+    backHome: "Back to main menu"
   },
   pl: {
     appTitle: "Quiz o Polsce",
-    subtitle: "Poland Quiz.exe",
+    subtitle: "Wybierz tryb quizu",
     woj: "Tylko Województwa",
     gminy: "Tylko Gminy",
     mixed: "Mieszany (Losowo)",
@@ -33,7 +38,12 @@ const dictionary = {
     lang: "Język",
     theme: "Motyw",
     light: "Jasny",
-    dark: "Ciemny"
+    dark: "Ciemny",
+    quizStub:
+      "Ten ekran potwierdza, że tryb quizu się otworzył. Mapa i pytania można tu później podłączyć — na razie każdy przycisk na stronie głównej powinien prowadzić do osobnego pomieszczenia tak jak ten.",
+    quizHintMap: "Na stronie głównej są cztery kafelki — każdy prowadzi do innego trybu nauki.",
+    quizHintBack: "Przycisk poniżej wraca do menu głównego.",
+    backHome: "Powrót do menu głównego"
   }
 };
 

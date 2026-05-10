@@ -6,7 +6,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        retro: ["Segoe UI", "Geneva", "Lucida Grande", "Tahoma", "sans-serif"]
+        retro: ["Tahoma", "MS Sans Serif", "Microsoft Sans Serif", "sans-serif"]
       }
     }
   },
