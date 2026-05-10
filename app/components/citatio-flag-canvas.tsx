@@ -10,7 +10,8 @@ import { useCallback, useEffect, useRef } from "react";
  */
 const RAINBOW_INTERVAL_MS = 120;
 const BLOCK = 4;
-const HEADER_H = 52;
+/** Multiple of stripe count so every band has the same pixel height (Citatio uses integer math). */
+const HEADER_H = 54;
 const ACCENT_ALPHA = 60 / 255;
 
 /** Six bands: light greys → reds (Citatio uses 6 rainbow hues). */
@@ -62,13 +63,16 @@ export function CitatioFlagCanvas() {
     tickRef.current = (tickRef.current + 1) % 10000;
     const tick = tickRef.current;
 
-    const stripeH = Math.max(1, Math.floor(h / n));
+    const stripeH = h / n;
     const drift = (tick * 2) % (BLOCK * n);
     let y = 0;
 
     for (let i = 0; i < n; i++) {
+      const y0 = Math.round(y);
+      const y1 = Math.round(y + stripeH);
+      const bandH = Math.max(1, y1 - y0);
       ctx.fillStyle = COLORS[i]!;
-      ctx.fillRect(0, y, w, stripeH);
+      ctx.fillRect(0, y0, w, bandH);
 
       const accentHex = COLORS[(i + ((tick / 2) | 0)) % n]!;
       const { r, g, b } = hexToRgb(accentHex);
@@ -76,14 +80,10 @@ export function CitatioFlagCanvas() {
 
       for (let x = -drift; x < w + BLOCK; x += BLOCK) {
         if ((((x / BLOCK) | 0) + i + ((tick / 2) | 0)) % 7 === 0) {
-          ctx.fillRect(x, y, BLOCK, stripeH);
+          ctx.fillRect(x, y0, BLOCK, bandH);
         }
       }
       y += stripeH;
-    }
-    if (y < h) {
-      ctx.fillStyle = COLORS[n - 1]!;
-      ctx.fillRect(0, y, w, h - y);
     }
   }, [resolvedTheme]);
 

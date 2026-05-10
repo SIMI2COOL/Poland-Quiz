@@ -82,7 +82,7 @@ const dictionary = {
     theme: "Motyw",
     light: "Jasny",
     dark: "Ciemny",
-    footerCredit: "Made by Teo Simon Untroib",
+    footerCredit: "Stworzone przez Teo Simon Untroib",
     settingsAria: "Język i wygląd",
     windowHome: "Quiz o Polsce — Start",
     windowWoj: "Quiz o Polsce — Województwa",
@@ -136,7 +136,7 @@ const dictionary = {
 const UIContext = createContext<UIContextType | undefined>(undefined);
 
 export function UIProvider({ children }: { children: React.ReactNode }) {
-  const [language, setLanguage] = useState<Language>("en");
+  const [language, setLanguage] = useState<Language>("pl");
 
   const value = useMemo(
     () => ({ language, setLanguage, t: (key: keyof typeof dictionary.en) => dictionary[language][key] }),

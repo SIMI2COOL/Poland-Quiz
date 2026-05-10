@@ -6,7 +6,7 @@ import { UIProvider } from "./context/ui-context";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="pl" suppressHydrationWarning>
       <body>
         <ThemeProvider>
           <UIProvider>
