@@ -15,8 +15,8 @@
   --citatio-page: #dcdcdc;
   --citatio-hero-stripe-dark: #121212;
   --citatio-hero-stripe-light: #e8e8e8;
-  /* ~120% browser zoom for the whole shell (see .citatio-root) */
-  --ui-zoom: 1.2;
+  /* Home + settings + quiz windows share this max width */
+  --citatio-content-width: min(1180px, 98vw);
 }
 
 .dark {
@@ -45,14 +45,11 @@ body {
 
 /* —— Citatio-style shell —— */
 .citatio-root {
-  min-height: calc(100vh / var(--ui-zoom));
-  width: calc(100vw / var(--ui-zoom));
-  max-width: calc(100vw / var(--ui-zoom));
+  min-height: 100vh;
+  width: 100%;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  transform: scale(var(--ui-zoom));
-  transform-origin: top left;
 }
 
 /* Citatio-style flag strip: canvas (see citatio-flag-canvas.tsx — mirrors Citatio RainbowHeader) */
@@ -118,7 +115,7 @@ body {
 }
 
 .citatio-stack {
-  max-width: 840px;
+  max-width: var(--citatio-content-width);
   width: 100%;
   margin: 0 auto;
   padding: 12px 16px 8px;
@@ -129,7 +126,7 @@ body {
 }
 
 .citatio-stack--quiz {
-  max-width: 1120px;
+  max-width: var(--citatio-content-width);
 }
 
 .lang-flag {
@@ -281,19 +278,26 @@ body {
   box-shadow: 1px 1px 0 var(--w98-dark);
 }
 
-/* Settings: compact text, wrap to next line if needed — no horizontal scroll bar */
+/* Settings: one row when content width allows — no scroll, no forced wrap */
 .citatio-settings.retro-menubar {
   margin: 0;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   overflow: visible;
   gap: 6px 10px;
   padding: 5px 8px;
 }
 
 .citatio-settings .retro-menubar-cluster {
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   flex: 1 1 auto;
   min-width: 0;
+}
+
+@media (max-width: 720px) {
+  .citatio-settings.retro-menubar,
+  .citatio-settings .retro-menubar-cluster {
+    flex-wrap: wrap;
+  }
 }
 
 .retro-menubar-app {

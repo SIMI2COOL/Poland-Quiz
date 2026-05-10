@@ -4,12 +4,12 @@ import { useTheme } from "next-themes";
 import { useCallback, useEffect, useRef } from "react";
 
 /**
- * Six seamless horizontal bands: 3 white, 3 red (Polish flag as stacked “lines”).
- * Citatio-style motion: block=4, 120ms tick, drift, (floor(x/block)+i+floor(tick/2))%7.
- * Accent cells use a white→grey linear gradient, offset slightly per stripe.
+ * Six seamless bands: 3 white, 3 red.
+ * Sparse transparent grey squares (no gradients); opacity fades in/out; +0.1px offset per column.
  */
-const RAINBOW_INTERVAL_MS = 120;
-const BLOCK = 4;
+const TICK_MS = 100;
+const BLOCK = 14;
+const GRID_MOD = 15;
 const HEADER_H = 52;
 
 const STRIPES_LIGHT = ["#f4f4f4", "#f4f4f4", "#f4f4f4", "#c91634", "#c91634", "#c91634"] as const;
@@ -52,7 +52,6 @@ export function CitatioFlagCanvas() {
 
     tickRef.current = (tickRef.current + 1) % 10000;
     const tick = tickRef.current;
-
     const drift = (tick * 2) % (BLOCK * n);
 
     for (let i = 0; i < n; i++) {
@@ -63,21 +62,12 @@ export function CitatioFlagCanvas() {
       ctx.fillStyle = stripeColors[i]!;
       ctx.fillRect(0, y0, w, stripeH);
 
-      const isWhite = i < 3;
-      const ox = (i % 2) * 2;
-
       for (let x = -drift; x < w + BLOCK; x += BLOCK) {
-        if ((((x / BLOCK) | 0) + i + ((tick / 2) | 0)) % 7 === 0) {
-          const gx = x + ox;
-          const g = ctx.createLinearGradient(gx, y0, gx + BLOCK, y0 + stripeH);
-          if (isWhite) {
-            g.addColorStop(0, "#ffffff");
-            g.addColorStop(1, "#7a7a7a");
-          } else {
-            g.addColorStop(0, "rgba(255,255,255,0.92)");
-            g.addColorStop(1, "rgba(35,35,35,0.5)");
-          }
-          ctx.fillStyle = g;
+        const col = Math.floor((x + drift) / BLOCK);
+        if ((col + i * 2 + ((tick / 2) | 0)) % GRID_MOD === 0) {
+          const gx = x + col * 0.1;
+          const alpha = 0.04 + 0.14 * (0.5 + 0.5 * Math.sin(tick * 0.22 + col * 0.09));
+          ctx.fillStyle = `rgba(96, 96, 96, ${alpha})`;
           ctx.fillRect(gx, y0, BLOCK, stripeH);
         }
       }
@@ -99,7 +89,7 @@ export function CitatioFlagCanvas() {
     ro.observe(wrap);
     const id = window.setInterval(() => {
       draw();
-    }, RAINBOW_INTERVAL_MS);
+    }, TICK_MS);
     return () => {
       ro.disconnect();
       window.clearInterval(id);
