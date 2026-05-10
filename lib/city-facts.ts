@@ -1,4 +1,6 @@
+import { CITIES } from "./cities";
 import type { UILang } from "./quiz-engine";
+import { voivById } from "./voivodeships";
 
 type Rot = { en: string[]; pl: string[] };
 
@@ -594,10 +596,31 @@ export const CITY_FACT_ROTATIONS: Record<string, Rot> = {
   }
 };
 
+function genericCityFact(namePl: string, lang: UILang, salt: number): string {
+  const c = CITIES.find((x) => x.namePl === namePl);
+  if (!c) return "";
+  const v = voivById.get(c.voivId);
+  if (!v) return "";
+  const templates =
+    lang === "pl"
+      ? [
+          `${namePl} leży w województwie ${v.namePl} i jest jednym z ważniejszych punktów na mapie tego regionu.`,
+          `Na mapie administracyjnej Polski ${namePl} należy do ${v.namePl} — ćwicz tę parę, by szybciej ją zapamiętać.`,
+          `${namePl} to miasto w ${v.namePl}; stolicą województwa jest ${v.capitalPl}.`
+        ]
+      : [
+          `${c.nameEn} lies in ${v.nameEn} and is a notable dot on this voivodeship’s map.`,
+          `On Poland’s admin map, ${c.nameEn} belongs to ${v.nameEn} — drilling this pair helps it stick.`,
+          `${c.nameEn} is a town in ${v.nameEn}; the voivodeship capital is ${v.capitalEn}.`
+        ];
+  return templates[salt % templates.length]!;
+}
+
 export function getCityFact(namePl: string, lang: UILang, salt: number): string {
   const row = CITY_FACT_ROTATIONS[namePl];
-  if (!row) return "";
-  const arr = lang === "pl" ? row.pl : row.en;
-  if (!arr.length) return "";
-  return arr[salt % arr.length]!;
+  if (row) {
+    const arr = lang === "pl" ? row.pl : row.en;
+    if (arr.length) return arr[salt % arr.length]!;
+  }
+  return genericCityFact(namePl, lang, salt);
 }

@@ -1,6 +1,7 @@
 import "./globals.css";
 import { ClientChrome } from "./components/client-chrome";
 import { ThemeProvider } from "./components/theme-provider";
+import { QuizPrefsProvider } from "./context/quiz-prefs-context";
 import { UIProvider } from "./context/ui-context";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -9,7 +10,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <ThemeProvider>
           <UIProvider>
-            <ClientChrome>{children}</ClientChrome>
+            <QuizPrefsProvider>
+              <ClientChrome>{children}</ClientChrome>
+            </QuizPrefsProvider>
           </UIProvider>
         </ThemeProvider>
       </body>

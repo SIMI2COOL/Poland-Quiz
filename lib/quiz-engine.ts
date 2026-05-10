@@ -1,4 +1,6 @@
 import { CITIES, type CityEntry } from "./cities";
+import type { SrsWeights } from "./srs-storage";
+import { cityPickWeight, voivPickWeight } from "./srs-storage";
 import { VOIVODESHIPS, type Voivodeship, voivById } from "./voivodeships";
 
 export type QuizMode = "woj" | "gminy" | "mixed" | "study";
@@ -42,13 +44,24 @@ function pick<T>(list: T[], rand: () => number): T {
   return list[Math.floor(rand() * list.length)]!;
 }
 
+function pickWeighted<T>(items: T[], weights: number[], rand: () => number): T {
+  const sum = weights.reduce((a, b) => a + b, 0);
+  let r = rand() * sum;
+  for (let i = 0; i < items.length; i++) {
+    r -= weights[i]!;
+    if (r <= 0) return items[i]!;
+  }
+  return items[items.length - 1]!;
+}
+
 function capitalLabel(v: Voivodeship, lang: UILang) {
   return lang === "pl" ? v.capitalPl : v.capitalEn;
 }
 
-export function makeCapitalQuestion(seed: number, lang: UILang): CapitalQuestion {
+export function makeCapitalQuestion(seed: number, lang: UILang, srs?: SrsWeights | null): CapitalQuestion {
   const rand = mulberry32(seed);
-  const voiv = pick(VOIVODESHIPS, rand);
+  const weights = VOIVODESHIPS.map((v) => voivPickWeight(v.id, srs ?? { voiv: {}, city: {} }));
+  const voiv = pickWeighted(VOIVODESHIPS, weights, rand);
   const correct = capitalLabel(voiv, lang);
   const wrongCapitals = shuffle(
     VOIVODESHIPS.filter((v) => v.id !== voiv.id).map((v) => capitalLabel(v, lang)),
@@ -63,9 +76,10 @@ export function makeCapitalQuestion(seed: number, lang: UILang): CapitalQuestion
   };
 }
 
-export function makeRegionQuestion(seed: number): RegionQuestion {
+export function makeRegionQuestion(seed: number, srs?: SrsWeights | null): RegionQuestion {
   const rand = mulberry32(seed);
-  const city = pick(CITIES, rand);
+  const weights = CITIES.map((c) => cityPickWeight(c.voivId, c.namePl, srs ?? { voiv: {}, city: {} }));
+  const city = pickWeighted(CITIES, weights, rand);
   const correct = voivById.get(city.voivId)!;
   const wrong = shuffle(
     VOIVODESHIPS.filter((v) => v.id !== correct.id),
@@ -80,11 +94,16 @@ export function makeRegionQuestion(seed: number): RegionQuestion {
   };
 }
 
-export function makeQuestion(mode: Exclude<QuizMode, "study">, seed: number, lang: UILang): QuizQuestion {
-  if (mode === "woj") return makeCapitalQuestion(seed, lang);
-  if (mode === "gminy") return makeRegionQuestion(seed);
+export function makeQuestion(
+  mode: Exclude<QuizMode, "study">,
+  seed: number,
+  lang: UILang,
+  srs?: SrsWeights | null
+): QuizQuestion {
+  if (mode === "woj") return makeCapitalQuestion(seed, lang, srs);
+  if (mode === "gminy") return makeRegionQuestion(seed, srs);
   const branch = mulberry32(seed)() < 0.5;
-  return branch ? makeCapitalQuestion(seed + 1, lang) : makeRegionQuestion(seed + 9999);
+  return branch ? makeCapitalQuestion(seed + 1, lang, srs) : makeRegionQuestion(seed + 9999, srs);
 }
 
 export function studyDeckOrder(seed: number): Voivodeship[] {

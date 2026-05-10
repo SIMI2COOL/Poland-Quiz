@@ -52,7 +52,17 @@ const dictionary = {
     notFoundBody: "This address is not part of Poland Quiz.",
     funFactLabel: "Did you know?",
     studyTreeTitle: "Voivodeships",
-    studyCitiesHeading: "Cities in this set"
+    studyCitiesHeading: "Cities in this set",
+    timerLabel: "Timer",
+    timerOff: "Off",
+    timerSec: "{n}s",
+    timerRemaining: "Time",
+    feedbackTimeout: "Time’s up.",
+    streakLabel: "Streak",
+    bestScoreLabel: "Best score",
+    bestStreakLabel: "Best streak",
+    newBestScore: "New best score for this mode!",
+    newBestStreak: "New best streak for this mode!"
   },
   pl: {
     appTitle: "Quiz o Polsce",
@@ -95,7 +105,17 @@ const dictionary = {
     notFoundBody: "Ten adres nie należy do Quizu o Polsce.",
     funFactLabel: "Czy wiesz, że…",
     studyTreeTitle: "Województwa",
-    studyCitiesHeading: "Miasta w tym zestawie"
+    studyCitiesHeading: "Miasta w tym zestawie",
+    timerLabel: "Czas",
+    timerOff: "Wył.",
+    timerSec: "{n} s",
+    timerRemaining: "Czas",
+    feedbackTimeout: "Czas minął.",
+    streakLabel: "Seria",
+    bestScoreLabel: "Rekord punktów",
+    bestStreakLabel: "Rekord serii",
+    newBestScore: "Nowy rekord punktów w tym trybie!",
+    newBestStreak: "Nowy rekord serii w tym trybie!"
   }
 };
 

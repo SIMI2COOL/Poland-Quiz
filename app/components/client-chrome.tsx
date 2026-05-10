@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useUI } from "../context/ui-context";
-import { PixelFlagBar } from "./pixel-flag-bar";
+import { StripeFlagBar } from "./stripe-flag-bar";
 
 export function ClientChrome({ children }: { children: React.ReactNode }) {
   const { t } = useUI();
@@ -26,7 +26,7 @@ export function ClientChrome({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="citatio-root">
-      <PixelFlagBar />
+      <StripeFlagBar />
       <main className="citatio-main">{children}</main>
       <footer className="citatio-taskbar">
         <span className="citatio-taskbar-credit">{t("footerCredit")}</span>

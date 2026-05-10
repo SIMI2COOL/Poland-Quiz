@@ -20,7 +20,7 @@ export function getQuizFunFact(opts: {
 }): string {
   const { lang, round, seed, kind, voivId, cityNamePl } = opts;
   const k = mixKey(round, seed, voivId, kind === "region" ? 17 : 3);
-  if (kind === "region" && cityNamePl && k % 3 !== 0) {
+  if (kind === "region" && cityNamePl) {
     const cityLine = getCityFact(cityNamePl, lang, k);
     if (cityLine) return cityLine;
   }

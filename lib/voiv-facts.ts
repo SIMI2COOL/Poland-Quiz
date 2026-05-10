@@ -55,14 +55,14 @@ const VOIV_ROTATIONS: Record<string, Rot> = {
   "08": {
     en: [
       "Lubusz is sparsely populated, with the Oder–Neisse line defining its western edge.",
-      "Łukaszów’s pine plantations and post-mining lakes attract quiet tourism.",
+      "Noteć meadows and old river oxbow lakes still shape quiet corners of the Lubusz landscape.",
       "Zielona Góra celebrates a wine-growing tradition rare this far north in Poland.",
       "Gorzów Wielkopolski anchors the northern half of this two-centre voivodeship.",
       "Urwisko glacial hills along the Odra valley create sudden viewpoints over wetlands."
     ],
     pl: [
       "Lubuskie jest słabo zaludnione; zachodnią granicę wyznacza linia Odry i Nysy.",
-      "Sosnowe plantacje i jeziora pogórnicze przyciągają turystów szukających spokoju.",
+      "Łąki nad Notecią i stare starorzecza wciąż kształtują spokojne zakątki krajobrazu lubuskiego.",
       "Zielona Góra ma tradycję winiarską rzadką na tej szerokości geograficznej.",
       "Gorzów Wlkp. kotwiczy północną część województwa o dwóch ośrodkach.",
       "Moreny i urwiska doliny Odry dają nagłe punkty widokowe nad rozlewiskami."
