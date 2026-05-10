@@ -4,28 +4,16 @@ import { useTheme } from "next-themes";
 import { useCallback, useEffect, useRef } from "react";
 
 /**
- * Pixelated header strip — same cadence and grid math as Citatio.py / website RainbowHeader
- * (SIMI2COOL/Citatio `website/index.html`): block=4, tick, drift, (floor(x/block)+i+floor(tick/2))%7.
- * Two stripes = Polish flag; accent tiles use light/dark overlays instead of rainbow palette.
+ * Six seamless horizontal bands: 3 white, 3 red (Polish flag as stacked “lines”).
+ * Citatio-style motion: block=4, 120ms tick, drift, (floor(x/block)+i+floor(tick/2))%7.
+ * Accent cells use a white→grey linear gradient, offset slightly per stripe.
  */
 const RAINBOW_INTERVAL_MS = 120;
 const BLOCK = 4;
-const HEADER_H = 56;
+const HEADER_H = 52;
 
-/* Polish flag base stripes */
-const STRIPE_LIGHT = ["#f4f4f4", "#c91634"] as const;
-const STRIPE_DARK = ["#e6e6e6", "#a8122a"] as const;
-
-/* Same accent palette + alpha as Citatio website RainbowHeader */
-const CT_COLORS = ["#6ABD45", "#F5BC00", "#F6821F", "#E2231A", "#8A2BE2", "#009CDE"] as const;
-
-function hexToRgb(hex: string) {
-  return {
-    r: parseInt(hex.slice(1, 3), 16),
-    g: parseInt(hex.slice(3, 5), 16),
-    b: parseInt(hex.slice(5, 7), 16)
-  };
-}
+const STRIPES_LIGHT = ["#f4f4f4", "#f4f4f4", "#f4f4f4", "#c91634", "#c91634", "#c91634"] as const;
+const STRIPES_DARK = ["#e6e6e6", "#e6e6e6", "#e6e6e6", "#a8122a", "#a8122a", "#a8122a"] as const;
 
 export function CitatioFlagCanvas() {
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -59,34 +47,40 @@ export function CitatioFlagCanvas() {
     const w = Math.max(1, Math.floor(wrap.getBoundingClientRect().width));
     const h = HEADER_H;
     const dark = resolvedTheme === "dark";
-    const stripes = dark ? STRIPE_DARK : STRIPE_LIGHT;
-    const n = stripes.length;
+    const stripeColors = dark ? STRIPES_DARK : STRIPES_LIGHT;
+    const n = stripeColors.length;
 
     tickRef.current = (tickRef.current + 1) % 10000;
     const tick = tickRef.current;
 
-    const stripeH = Math.max(1, Math.floor(h / n));
     const drift = (tick * 2) % (BLOCK * n);
-    let y = 0;
 
     for (let i = 0; i < n; i++) {
-      ctx.fillStyle = stripes[i]!;
-      ctx.fillRect(0, y, w, stripeH);
+      const y0 = Math.floor((h * i) / n);
+      const y1 = Math.floor((h * (i + 1)) / n);
+      const stripeH = Math.max(1, y1 - y0);
 
-      const accentHex = CT_COLORS[(i + ((tick / 2) | 0)) % CT_COLORS.length]!;
-      const { r, g, b } = hexToRgb(accentHex);
-      ctx.fillStyle = `rgba(${r},${g},${b},${60 / 255})`;
+      ctx.fillStyle = stripeColors[i]!;
+      ctx.fillRect(0, y0, w, stripeH);
+
+      const isWhite = i < 3;
+      const ox = (i % 2) * 2;
 
       for (let x = -drift; x < w + BLOCK; x += BLOCK) {
         if ((((x / BLOCK) | 0) + i + ((tick / 2) | 0)) % 7 === 0) {
-          ctx.fillRect(x, y, BLOCK, stripeH);
+          const gx = x + ox;
+          const g = ctx.createLinearGradient(gx, y0, gx + BLOCK, y0 + stripeH);
+          if (isWhite) {
+            g.addColorStop(0, "#ffffff");
+            g.addColorStop(1, "#7a7a7a");
+          } else {
+            g.addColorStop(0, "rgba(255,255,255,0.92)");
+            g.addColorStop(1, "rgba(35,35,35,0.5)");
+          }
+          ctx.fillStyle = g;
+          ctx.fillRect(gx, y0, BLOCK, stripeH);
         }
       }
-      y += stripeH;
-    }
-    if (y < h) {
-      ctx.fillStyle = stripes[n - 1]!;
-      ctx.fillRect(0, y, w, h - y);
     }
   }, [resolvedTheme]);
 

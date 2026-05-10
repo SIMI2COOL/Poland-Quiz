@@ -67,7 +67,7 @@ body {
 .pl-flag-canvas {
   display: block;
   width: 100%;
-  height: 56px;
+  height: 52px;
   image-rendering: pixelated;
   vertical-align: top;
 }
@@ -159,9 +159,6 @@ body {
   color: transparent;
 }
 
-.citatio-settings.retro-menubar {
-  margin: 0;
-}
 
 .citatio-window-brand {
   text-align: center;
@@ -284,58 +281,19 @@ body {
   box-shadow: 1px 1px 0 var(--w98-dark);
 }
 
-/* Settings bar: one row, full labels, larger hit targets (scroll only if viewport is very narrow) */
+/* Settings: compact text, wrap to next line if needed — no horizontal scroll bar */
 .citatio-settings.retro-menubar {
-  flex-wrap: nowrap;
-  align-items: center;
-  gap: 10px 14px;
-  min-height: 52px;
-  padding: 10px 14px;
-  overflow-x: auto;
-  overflow-y: hidden;
-  scrollbar-width: thin;
-}
-
-.citatio-settings .retro-menubar-app {
-  flex-shrink: 0;
-  font-size: 15px;
-  gap: 8px;
+  margin: 0;
+  flex-wrap: wrap;
+  overflow: visible;
+  gap: 6px 10px;
+  padding: 5px 8px;
 }
 
 .citatio-settings .retro-menubar-cluster {
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   flex: 1 1 auto;
   min-width: 0;
-  gap: 10px 14px;
-  font-size: 14px;
-}
-
-.citatio-settings .retro-menubar-label {
-  font-size: 14px;
-  white-space: nowrap;
-}
-
-.citatio-settings .retro-menubar-divider {
-  flex-shrink: 0;
-  height: 28px;
-  margin: 0 2px;
-}
-
-.citatio-settings .retro-pill-group {
-  flex-shrink: 0;
-  padding: 3px;
-  gap: 3px;
-}
-
-.citatio-settings .retro-chip {
-  padding: 7px 14px;
-  font-size: 14px;
-  white-space: nowrap;
-}
-
-.citatio-settings .retro-menubar-flag {
-  width: 20px;
-  height: 14px;
 }
 
 .retro-menubar-app {
