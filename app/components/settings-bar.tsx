@@ -28,10 +28,6 @@ export function SettingsBar() {
 
   return (
     <nav className="retro-menubar citatio-settings" aria-label={t("settingsAria")}>
-      <div className="retro-menubar-app">
-        <FlagPL className="retro-menubar-flag" />
-        <span>{t("appTitle")}</span>
-      </div>
       <div className="retro-menubar-cluster">
         <span className="retro-menubar-label">{t("lang")}</span>
         <div className="retro-pill-group">
