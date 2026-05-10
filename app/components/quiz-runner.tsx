@@ -10,7 +10,7 @@ import {
   type QuizQuestion,
   type UILang
 } from "@/lib/quiz-engine";
-import { getVoivFact } from "@/lib/voiv-facts";
+import { getQuizFunFact } from "@/lib/quiz-facts";
 import { useUI } from "../context/ui-context";
 import { PolandMap } from "./poland-map";
 import { StudyExplorer } from "./study-explorer";
@@ -90,7 +90,17 @@ export function QuizRunner({ mode }: Props) {
 
   const factVoivId =
     question.kind === "capital" ? question.voiv.id : question.options[correctIndex]!.id;
-  const funFact = phase === "revealed" ? getVoivFact(factVoivId, lang) : "";
+  const funFact =
+    phase === "revealed"
+      ? getQuizFunFact({
+          lang,
+          round,
+          seed,
+          kind: question.kind,
+          voivId: factVoivId,
+          cityNamePl: question.kind === "region" ? question.city.namePl : undefined
+        })
+      : "";
 
   return (
     <div className="citatio-quiz-shell">

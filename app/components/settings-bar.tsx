@@ -1,6 +1,7 @@
 "use client";
 
 import { useTheme } from "next-themes";
+import { FlagGB, FlagPL } from "./flag-icons";
 import { useUI } from "../context/ui-context";
 
 export function SettingsBar() {
@@ -10,7 +11,7 @@ export function SettingsBar() {
   return (
     <nav className="retro-menubar citatio-settings" aria-label={t("settingsAria")}>
       <div className="retro-menubar-app">
-        <span aria-hidden="true">🇵🇱</span>
+        <FlagPL className="retro-menubar-flag" />
         <span>{t("appTitle")}</span>
       </div>
       <div className="retro-menubar-cluster">
@@ -21,20 +22,14 @@ export function SettingsBar() {
                 className={`retro-chip ${language === "en" ? "retro-chip--on" : ""}`}
                 onClick={() => setLanguage("en")}
               >
-                <span className="lang-flag" aria-hidden>
-                  🇬🇧
-                </span>{" "}
-                EN
+                <FlagGB className="lang-flag-svg" /> EN
               </button>
               <button
                 type="button"
                 className={`retro-chip ${language === "pl" ? "retro-chip--on" : ""}`}
                 onClick={() => setLanguage("pl")}
               >
-                <span className="lang-flag" aria-hidden>
-                  🇵🇱
-                </span>{" "}
-                PL
+                <FlagPL className="lang-flag-svg" /> PL
               </button>
         </div>
         <span className="retro-menubar-divider" aria-hidden="true" />

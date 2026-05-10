@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { CITIES } from "@/lib/cities";
-import { getVoivFact } from "@/lib/voiv-facts";
+import { getStudyVoivFact } from "@/lib/quiz-facts";
 import { VOIVODESHIPS, voivById } from "@/lib/voivodeships";
 import { voivLabel, type UILang } from "@/lib/quiz-engine";
 import { useUI } from "../context/ui-context";
@@ -25,7 +25,8 @@ export function StudyExplorer() {
   );
 
   const v = voivById.get(selectedId);
-  const fact = v ? getVoivFact(selectedId, lang) : "";
+  const factTick = Number.parseInt(selectedId, 10) + citiesInVoiv.length * 7;
+  const fact = v ? getStudyVoivFact(selectedId, lang, factTick) : "";
 
   return (
     <div className="study-shell">
@@ -49,25 +50,29 @@ export function StudyExplorer() {
         <PolandMap highlightTerytId={selectedId} pulse />
       </div>
       <aside className="study-pane retro-panel-sunken">
-        {v && (
-          <>
-            <h3 className="study-pane-name m-0">{voivLabel(v, lang)}</h3>
-            <p className="study-pane-capital m-0">
-              <span className="study-pane-k">{t("studyCapitalLabel")}:</span>{" "}
-              <strong>{lang === "pl" ? v.capitalPl : v.capitalEn}</strong>
-            </p>
-            {fact && <p className="study-pane-fact m-0">{fact}</p>}
-            <p className="study-pane-sub m-0 font-bold">{t("studyCitiesHeading")}</p>
-            <ul className="study-pane-cities m-0 pl-4">
-              {citiesInVoiv.map((c) => (
-                <li key={`${c.voivId}-${c.namePl}`}>{lang === "pl" ? c.namePl : c.nameEn}</li>
-              ))}
-            </ul>
-          </>
-        )}
-        <Link href="/" className="retro-btn citatio-option mt-4 no-underline text-center">
-          {t("backHome")}
-        </Link>
+        <div className="study-pane-scroll">
+          {v && (
+            <>
+              <h3 className="study-pane-name m-0">{voivLabel(v, lang)}</h3>
+              <p className="study-pane-capital m-0">
+                <span className="study-pane-k">{t("studyCapitalLabel")}:</span>{" "}
+                <strong>{lang === "pl" ? v.capitalPl : v.capitalEn}</strong>
+              </p>
+              {fact && <p className="study-pane-fact m-0">{fact}</p>}
+              <p className="study-pane-sub m-0 font-bold">{t("studyCitiesHeading")}</p>
+              <ul className="study-pane-cities m-0 pl-4">
+                {citiesInVoiv.map((c) => (
+                  <li key={`${c.voivId}-${c.namePl}`}>{lang === "pl" ? c.namePl : c.nameEn}</li>
+                ))}
+              </ul>
+            </>
+          )}
+        </div>
+        <div className="study-pane-footer">
+          <Link href="/" className="retro-btn citatio-option no-underline text-center block w-full">
+            {t("backHome")}
+          </Link>
+        </div>
       </aside>
     </div>
   );

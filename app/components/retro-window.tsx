@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { FlagPL } from "./flag-icons";
 
 type RetroWindowProps = {
   title: string;
@@ -14,7 +15,7 @@ export function RetroWindow({ title, children, className, icon }: RetroWindowPro
       <header className="retro-titlebar">
         <div className="retro-titlebar-inner">
           <div className="retro-titlebar-leading">
-            <span className="retro-title-icon">{icon ?? "🇵🇱"}</span>
+            <span className="retro-title-icon">{icon ?? <FlagPL className="retro-title-flag" />}</span>
             <h2 className="retro-title-text">{title}</h2>
           </div>
           <div className="retro-w98-controls" aria-hidden="true">

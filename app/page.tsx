@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { APP_VERSION } from "@/lib/app-version";
+import { FlagPL } from "./components/flag-icons";
 import { RetroWindow } from "./components/retro-window";
 import { SettingsBar } from "./components/settings-bar";
 import { useUI } from "./context/ui-context";
@@ -15,7 +16,7 @@ export default function Page() {
       <SettingsBar />
       <RetroWindow title={t("windowHome")}>
         <div className="citatio-window-brand" aria-hidden="true">
-          🇵🇱
+          <FlagPL className="citatio-window-brand-flag" />
         </div>
         <p className="citatio-tagline m-0 text-center">{t("tagline")}</p>
         <p className="citatio-version m-0 text-center">
