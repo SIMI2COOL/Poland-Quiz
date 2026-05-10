@@ -19,7 +19,11 @@
   --citatio-content-width: min(1180px, 98vw);
   /* Uniform +25% scale of the app shell (aspect unchanged) */
   --ui-zoom: 1.25;
-  /* Classic Win9x 3px raised shell (outer TL light → BR dark, mid grey, inner inverted) */
+  /* Raised shell: three rings (width ×3 = total frame thickness) */
+  --shell-raised-ring: 2px;
+  --shell-inset-border: 2px;
+  --shell-clock-border: 2px;
+  /* Classic Win9x raised shell (outer TL light → BR dark, mid grey, inner inverted) */
   --bevel-win-outer-tl: #ffffff;
   --bevel-win-outer-br: #424242;
   --bevel-win-mid: #848484;
@@ -83,7 +87,7 @@ body {
   padding: 10px;
 }
 
-/* 3px raised bevel around flag + content + taskbar (nested 1px rings, Citatio-style) */
+/* Raised bevel around flag + content + taskbar (nested rings, Citatio-style) */
 .citatio-app-bevel-outer {
   flex: 1 1 auto;
   min-height: calc(100vh / var(--ui-zoom) - 20px);
@@ -91,7 +95,7 @@ body {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  border: 1px solid;
+  border: var(--shell-raised-ring) solid;
   border-color: var(--bevel-win-outer-tl) var(--bevel-win-outer-br) var(--bevel-win-outer-br)
     var(--bevel-win-outer-tl);
 }
@@ -102,7 +106,7 @@ body {
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  border: 1px solid var(--bevel-win-mid);
+  border: var(--shell-raised-ring) solid var(--bevel-win-mid);
 }
 
 .citatio-app-window {
@@ -111,7 +115,7 @@ body {
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  border: 1px solid;
+  border: var(--shell-raised-ring) solid;
   border-color: var(--bevel-win-inner-tl) var(--bevel-win-inner-br) var(--bevel-win-inner-br)
     var(--bevel-win-inner-tl);
   background: var(--w98-face);
@@ -122,7 +126,7 @@ body {
 .pl-flag-canvas-wrap {
   flex-shrink: 0;
   width: 100%;
-  border-bottom: 1px solid var(--bevel-win-mid);
+  border-bottom: var(--shell-raised-ring) solid var(--bevel-win-mid);
   box-sizing: border-box;
   background: #1a1a1a;
 }
@@ -160,8 +164,8 @@ body {
   min-height: 30px;
   box-sizing: border-box;
   background: var(--shell-status-bg);
-  border-top: 1px solid var(--bevel-inset-top);
-  border-bottom: 1px solid var(--bevel-inset-bottom);
+  border-top: var(--shell-inset-border) solid var(--bevel-inset-top);
+  border-bottom: var(--shell-inset-border) solid var(--bevel-inset-bottom);
 }
 
 .citatio-taskbar-credit {
@@ -179,7 +183,7 @@ body {
   font-variant-numeric: tabular-nums;
   color: #000000;
   background: var(--clock-face-bg);
-  border: 1px solid;
+  border: var(--shell-clock-border) solid;
   border-color: var(--clock-inset-tl) var(--clock-inset-br) var(--clock-inset-br) var(--clock-inset-tl);
 }
 
