@@ -1,0 +1,58 @@
+/** Cities / towns for “which voivodeship?” — not exhaustive, learning set. */
+export type CityEntry = {
+  namePl: string;
+  nameEn: string;
+  voivId: string;
+};
+
+export const CITIES: CityEntry[] = [
+  { namePl: "Wrocław", nameEn: "Wrocław", voivId: "02" },
+  { namePl: "Wałbrzych", nameEn: "Wałbrzych", voivId: "02" },
+  { namePl: "Jelenia Góra", nameEn: "Jelenia Góra", voivId: "02" },
+  { namePl: "Legnica", nameEn: "Legnica", voivId: "02" },
+  { namePl: "Bydgoszcz", nameEn: "Bydgoszcz", voivId: "04" },
+  { namePl: "Toruń", nameEn: "Toruń", voivId: "04" },
+  { namePl: "Grudziądz", nameEn: "Grudziądz", voivId: "04" },
+  { namePl: "Włocławek", nameEn: "Włocławek", voivId: "04" },
+  { namePl: "Lublin", nameEn: "Lublin", voivId: "06" },
+  { namePl: "Zamość", nameEn: "Zamość", voivId: "06" },
+  { namePl: "Chełm", nameEn: "Chełm", voivId: "06" },
+  { namePl: "Zielona Góra", nameEn: "Zielona Góra", voivId: "08" },
+  { namePl: "Gorzów Wielkopolski", nameEn: "Gorzów Wielkopolski", voivId: "08" },
+  { namePl: "Łódź", nameEn: "Łódź", voivId: "10" },
+  { namePl: "Piotrków Trybunalski", nameEn: "Piotrków Trybunalski", voivId: "10" },
+  { namePl: "Skierniewice", nameEn: "Skierniewice", voivId: "10" },
+  { namePl: "Kraków", nameEn: "Kraków", voivId: "12" },
+  { namePl: "Tarnów", nameEn: "Tarnów", voivId: "12" },
+  { namePl: "Nowy Sącz", nameEn: "Nowy Sącz", voivId: "12" },
+  { namePl: "Warszawa", nameEn: "Warsaw", voivId: "14" },
+  { namePl: "Radom", nameEn: "Radom", voivId: "14" },
+  { namePl: "Płock", nameEn: "Płock", voivId: "14" },
+  { namePl: "Siedlce", nameEn: "Siedlce", voivId: "14" },
+  { namePl: "Opole", nameEn: "Opole", voivId: "16" },
+  { namePl: "Kędzierzyn-Koźle", nameEn: "Kędzierzyn-Koźle", voivId: "16" },
+  { namePl: "Rzeszów", nameEn: "Rzeszów", voivId: "18" },
+  { namePl: "Przemyśl", nameEn: "Przemyśl", voivId: "18" },
+  { namePl: "Krosno", nameEn: "Krosno", voivId: "18" },
+  { namePl: "Białystok", nameEn: "Białystok", voivId: "20" },
+  { namePl: "Suwałki", nameEn: "Suwałki", voivId: "20" },
+  { namePl: "Łomża", nameEn: "Łomża", voivId: "20" },
+  { namePl: "Gdańsk", nameEn: "Gdańsk", voivId: "22" },
+  { namePl: "Gdynia", nameEn: "Gdynia", voivId: "22" },
+  { namePl: "Słupsk", nameEn: "Słupsk", voivId: "22" },
+  { namePl: "Katowice", nameEn: "Katowice", voivId: "24" },
+  { namePl: "Częstochowa", nameEn: "Częstochowa", voivId: "24" },
+  { namePl: "Gliwice", nameEn: "Gliwice", voivId: "24" },
+  { namePl: "Bielsko-Biała", nameEn: "Bielsko-Biała", voivId: "24" },
+  { namePl: "Kielce", nameEn: "Kielce", voivId: "26" },
+  { namePl: "Ostrowiec Świętokrzyski", nameEn: "Ostrowiec Świętokrzyski", voivId: "26" },
+  { namePl: "Olsztyn", nameEn: "Olsztyn", voivId: "28" },
+  { namePl: "Elbląg", nameEn: "Elbląg", voivId: "28" },
+  { namePl: "Ełk", nameEn: "Ełk", voivId: "28" },
+  { namePl: "Poznań", nameEn: "Poznań", voivId: "30" },
+  { namePl: "Kalisz", nameEn: "Kalisz", voivId: "30" },
+  { namePl: "Konin", nameEn: "Konin", voivId: "30" },
+  { namePl: "Szczecin", nameEn: "Szczecin", voivId: "32" },
+  { namePl: "Koszalin", nameEn: "Koszalin", voivId: "32" },
+  { namePl: "Stargard", nameEn: "Stargard", voivId: "32" }
+];

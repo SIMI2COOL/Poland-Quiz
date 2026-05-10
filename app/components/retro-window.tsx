@@ -4,14 +4,19 @@ type RetroWindowProps = {
   title: string;
   children: ReactNode;
   className?: string;
+  /** Shown before the title (default Polish flag). */
+  icon?: ReactNode;
 };
 
-export function RetroWindow({ title, children, className }: RetroWindowProps) {
+export function RetroWindow({ title, children, className, icon }: RetroWindowProps) {
   return (
     <section className={`retro-window ${className ?? ""}`.trim()}>
       <header className="retro-titlebar">
         <div className="retro-titlebar-inner">
-          <h2 className="retro-title-text">{title}</h2>
+          <div className="retro-titlebar-leading">
+            <span className="retro-title-icon">{icon ?? "🇵🇱"}</span>
+            <h2 className="retro-title-text">{title}</h2>
+          </div>
           <div className="retro-w98-controls" aria-hidden="true">
             <span className="retro-w98-cmd">_</span>
             <span className="retro-w98-cmd">□</span>

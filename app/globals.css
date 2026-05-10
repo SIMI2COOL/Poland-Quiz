@@ -2,9 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-/* —— Windows 98 palette (light) —— */
+/* —— Shared Win98-style bevel tokens —— */
 :root {
-  --w98-desktop: #008080;
   --w98-face: #c0c0c0;
   --w98-face-dark: #a0a0a0;
   --w98-text: #000000;
@@ -13,70 +12,174 @@
   --w98-mid: #808080;
   --w98-dark: #404040;
   --w98-shadow: #000000;
-  --w98-title-start: #0a246a;
-  --w98-title-end: #a6caf0;
-  --w98-title-text: #ffffff;
+  --citatio-page: #dcdcdc;
+  --citatio-hero-stripe-dark: #121212;
+  --citatio-hero-stripe-light: #e8e8e8;
 }
 
-/* Dark: “late night at the office” — same bevel language, muted */
 .dark {
-  --w98-desktop: #0d2828;
   --w98-face: #3a3a3a;
   --w98-face-dark: #2a2a2a;
-  --w98-text: #e8e8e8;
-  --w98-text-dim: #c0c0c0;
+  --w98-text: #f0f0f0;
+  --w98-text-dim: #d0d0d0;
   --w98-light: #6a6a6a;
   --w98-mid: #505050;
   --w98-dark: #1a1a1a;
   --w98-shadow: #000000;
-  --w98-title-start: #1a3a6a;
-  --w98-title-end: #4a6a8a;
-  --w98-title-text: #ffffff;
+  --citatio-page: #2d2d2d;
+  --citatio-hero-stripe-dark: #f2f2f2;
+  --citatio-hero-stripe-light: #2a2a2a;
 }
 
 body {
   font-family: Tahoma, "MS Sans Serif", "Microsoft Sans Serif", sans-serif;
   font-size: 13px;
   color: var(--w98-text);
-  min-height: 100vh;
   margin: 0;
-  background: var(--w98-desktop);
+  min-height: 100vh;
+  background: var(--citatio-page);
 }
 
-.dark body {
-  background: var(--w98-desktop);
+/* —— Citatio-style shell —— */
+.citatio-root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-/* Subtle dither (optional, very light) */
-body::before {
-  content: "";
+.citatio-rainbow {
+  height: 8px;
+  flex-shrink: 0;
+  background: linear-gradient(
+    90deg,
+    #e53935 0%,
+    #ff9800 16%,
+    #ffeb3b 33%,
+    #4caf50 50%,
+    #2196f3 66%,
+    #9c27b0 83%,
+    #673ab7 100%
+  );
+}
+
+.citatio-main {
+  flex: 1;
+  background: var(--citatio-page);
+  padding-bottom: 40px;
+}
+
+.citatio-taskbar {
   position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background-image: url("/textures/bliss-grain.svg");
-  opacity: 0.04;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 4px 10px;
+  min-height: 30px;
+  box-sizing: border-box;
+  background: var(--w98-face);
+  border-top: 2px solid;
+  border-color: var(--w98-light) var(--w98-shadow) transparent var(--w98-light);
+  box-shadow: 0 -1px 0 var(--w98-dark);
 }
 
-.dark body::before {
-  opacity: 0.08;
+.citatio-taskbar-credit {
+  font-size: 11px;
+  font-weight: bold;
+  color: var(--w98-text);
 }
 
-/* Raised outer frame (dialog / “window chrome”) */
+.citatio-clock {
+  min-width: 6.5rem;
+  text-align: center;
+  padding: 3px 10px;
+  font-size: 11px;
+  font-weight: bold;
+  font-variant-numeric: tabular-nums;
+  color: var(--w98-text);
+  background: var(--w98-face);
+  border: 2px solid;
+  border-color: var(--w98-mid) var(--w98-light) var(--w98-light) var(--w98-mid);
+  box-shadow: inset 1px 1px 0 var(--w98-dark);
+}
+
+.citatio-stack {
+  max-width: 460px;
+  margin: 0 auto;
+  padding: 12px 14px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.citatio-stack--center {
+  min-height: calc(100vh - 48px);
+  justify-content: center;
+}
+
+.citatio-hero-title {
+  margin: 4px 0 0;
+  text-align: center;
+  font-size: clamp(2rem, 9vw, 3rem);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  background: repeating-linear-gradient(
+    to bottom,
+    var(--citatio-hero-stripe-dark) 0 5px,
+    var(--citatio-hero-stripe-light) 5px 6px
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.citatio-settings.retro-menubar {
+  margin: 0;
+}
+
+.citatio-window-brand {
+  text-align: center;
+  font-size: 2.75rem;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.citatio-tagline {
+  line-height: 1.45;
+  color: var(--w98-text-dim);
+  font-size: 12px;
+}
+
+.citatio-version {
+  margin-top: 8px !important;
+  font-size: 11px;
+  color: var(--w98-text-dim);
+}
+
+.citatio-launch-pad {
+  margin-top: 14px;
+}
+
+/* —— Window (raised bevel, gray title bar like reference) —— */
 .retro-window {
   overflow: hidden;
   border-radius: 0;
   background: var(--w98-face);
   border: 2px solid;
   border-color: var(--w98-light) var(--w98-shadow) var(--w98-shadow) var(--w98-light);
-  box-shadow: 1px 1px 0 var(--w98-dark);
+  box-shadow: 2px 2px 0 var(--w98-dark);
 }
 
-/* Title bar — classic Win9x gradient */
 .retro-titlebar {
   margin: 0;
   padding: 0;
-  background: linear-gradient(90deg, var(--w98-title-start), var(--w98-title-end));
-  border-bottom: 1px solid var(--w98-shadow);
+  background: linear-gradient(180deg, #6a6a6a 0%, #808080 45%, #585858 100%);
+  border-bottom: 1px solid #2a2a2a;
 }
 
 .retro-titlebar-inner {
@@ -84,24 +187,39 @@ body::before {
   align-items: center;
   justify-content: space-between;
   gap: 6px;
-  padding: 3px 4px 3px 6px;
+  padding: 3px 4px 3px 5px;
   min-height: 26px;
+}
+
+.retro-titlebar-leading {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  flex: 1;
+}
+
+.retro-title-icon {
+  font-size: 14px;
+  line-height: 1;
+  flex-shrink: 0;
 }
 
 .retro-title-text {
   margin: 0;
   flex: 1;
+  min-width: 0;
   font-size: 11px;
   font-weight: bold;
   line-height: 1.2;
-  color: var(--w98-title-text);
+  color: #ffffff;
   letter-spacing: 0.02em;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-shadow: 1px 1px 0 #000000;
 }
 
-/* Decorative title-bar buttons (Win98 square) */
 .retro-w98-controls {
   display: flex;
   align-items: center;
@@ -126,20 +244,12 @@ body::before {
   box-shadow: inset -1px -1px 0 var(--w98-mid);
 }
 
-/* Client area */
 .retro-window-content {
-  padding: 10px 12px;
+  padding: 12px 14px;
   background: var(--w98-face);
   border-top: 1px solid var(--w98-light);
 }
 
-@media (min-width: 640px) {
-  .retro-window-content {
-    padding: 12px 14px;
-  }
-}
-
-/* Top menu strip */
 .retro-menubar {
   display: flex;
   flex-wrap: wrap;
@@ -183,7 +293,6 @@ body::before {
   margin: 0 2px;
 }
 
-/* Sunken group for segmented controls */
 .retro-pill-group {
   display: inline-flex;
   padding: 2px;
@@ -227,7 +336,6 @@ body::before {
   padding: 4px 7px 2px 9px;
 }
 
-/* Primary push buttons & links styled as buttons */
 .retro-btn {
   cursor: pointer;
   font: inherit;
@@ -253,10 +361,6 @@ body::before {
 .retro-btn:active {
   border-color: var(--w98-shadow) var(--w98-light) var(--w98-light) var(--w98-shadow);
   box-shadow: inset 1px 1px 0 var(--w98-mid);
-}
-
-.retro-primary-cta {
-  min-width: 120px;
 }
 
 .retro-launch-grid {
@@ -299,20 +403,135 @@ body::before {
   line-height: 1.25;
 }
 
-.retro-lead {
-  line-height: 1.45;
-  color: var(--w98-text);
+/* —— Quiz panel —— */
+.citatio-quiz {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-.retro-hint-list {
-  margin: 0;
-  padding-left: 1.25rem;
+.citatio-prompt {
+  font-size: 12px;
+  font-weight: bold;
   color: var(--w98-text-dim);
-  line-height: 1.5;
+  text-align: center;
 }
 
-.retro-hint-list li {
-  margin-bottom: 4px;
+.citatio-prompt-highlight {
+  font-size: 15px;
+  font-weight: bold;
+  text-align: center;
+  color: var(--w98-text);
+  margin-top: 4px !important;
+}
+
+.citatio-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.citatio-option {
+  width: 100%;
+  padding: 10px 12px;
+  text-align: center;
+}
+
+.citatio-option--correct {
+  background: #c8e6c9 !important;
+  border-color: #1b5e20 !important;
+}
+
+.citatio-option--wrong {
+  background: #ffcdd2 !important;
+  border-color: #b71c1c !important;
+}
+
+.dark .citatio-option--correct {
+  background: #1b3d1f !important;
+  border-color: #81c784 !important;
+}
+
+.dark .citatio-option--wrong {
+  background: #4a1c1c !important;
+  border-color: #e57373 !important;
+}
+
+.citatio-feedback {
+  font-size: 12px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.citatio-feedback--ok {
+  color: #1b5e20;
+}
+
+.citatio-feedback--bad {
+  color: #b71c1c;
+}
+
+.dark .citatio-feedback--ok {
+  color: #a5d6a7;
+}
+
+.dark .citatio-feedback--bad {
+  color: #ef9a9a;
+}
+
+.citatio-score {
+  font-size: 11px;
+  text-align: center;
+  color: var(--w98-text-dim);
+}
+
+.citatio-quiz-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.citatio-study-lead {
+  font-size: 12px;
+  color: var(--w98-text-dim);
+}
+
+.citatio-study-card {
+  border: 2px solid;
+  border-color: var(--w98-mid) var(--w98-light) var(--w98-light) var(--w98-mid);
+  box-shadow: inset 1px 1px 0 var(--w98-dark);
+  padding: 12px;
+  background: var(--w98-face-dark);
+}
+
+.citatio-study-row {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 10px;
+}
+
+.citatio-study-row:last-child {
+  margin-bottom: 0;
+}
+
+.citatio-study-k {
+  font-size: 10px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--w98-text-dim);
+}
+
+.citatio-study-v {
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.citatio-study-count {
+  font-size: 11px;
+  color: var(--w98-text-dim);
 }
 
 .retro-btn:focus-visible,
